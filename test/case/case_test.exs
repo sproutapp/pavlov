@@ -1,4 +1,4 @@
-defmodule PavlovTest do
+defmodule PavlovCaseTest do
   use Pavlov.Case, async: true
 
   it "is the truth" do
