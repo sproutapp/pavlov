@@ -1,7 +1,7 @@
 defmodule PavlovTest do
-  use ExUnit.Case
+  use Pavlov.Case
 
-  test "the truth" do
+  it "is the truth" do
     assert 1 + 1 == 2
   end
 end
