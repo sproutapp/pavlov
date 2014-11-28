@@ -24,7 +24,7 @@ defmodule PavlovCaseTest do
   end
 
   describe ".let" do
-    setup do
+    setup_all do
       Agent.start_link(fn -> 0 end, name: :memoized_let)
       :ok
     end
