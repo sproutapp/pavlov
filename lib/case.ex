@@ -85,7 +85,8 @@ defmodule Pavlov.Case do
 
   defmacro let(name, contents) do
     quote do
-      def unquote(name)(), do: unquote(contents[:do])
+      require Pavlov.Utils.Memoize, as: Memoize
+      Memoize.defmem unquote(name)(), do: unquote(contents[:do])
     end
   end
 
