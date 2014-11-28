@@ -3,7 +3,7 @@ pavlov
 
 A BDD framework for your Elixir projects.
 
-Tentative, fantasy-land usage:
+Simple usage:
 
 ```elixir
 defmodule OrderSpec do
