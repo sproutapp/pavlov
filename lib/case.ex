@@ -48,13 +48,27 @@ defmodule Pavlov.Case do
   defmacro describe(description, _ \\ quote(do: _), contents) do
     quote do
       @stack Enum.concat(@stack, [unquote(description) <> ", "])
+      # Closure the old stack so we can use it in defmodule
+      oldStack = Enum.concat @stack, []
 
-      unquote(contents)
+      # Defines a new module per describe, thus scoping .let
+      defmodule Module.concat(__MODULE__, unquote(description)) do
+        use ExUnit.Case
+        @stack oldStack
+
+        unquote(contents)
+      end
 
       # Cleans context stack
       if Enum.count(@stack) > 0 do
         @stack Enum.take(@stack, Enum.count(@stack) - 1)
       end
+    end
+  end
+
+  defmacro let(name, contents) do
+    quote do
+      def unquote(name)(), do: unquote(contents[:do])
     end
   end
 
@@ -67,12 +81,12 @@ defmodule Pavlov.Case do
             unquote(contents)
             :ok
           end
-          _ ->
-            quote do
-              try(unquote(contents))
-              :ok
-            end
+        _ ->
+          quote do
+            try(unquote(contents))
+            :ok
           end
+        end
 
     var      = Macro.escape(var)
     contents = Macro.escape(contents, unquote: true)
