@@ -1,3 +1,6 @@
 defmodule Pavlov do
-  Pavlov.Utils.Memoize.ResultTable.start_link
+  def start do
+    Pavlov.Utils.Memoize.ResultTable.start_link
+    ExUnit.start
+  end
 end
