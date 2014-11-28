@@ -11,13 +11,15 @@ defmodule OrderSpec do
 
   describe ".sum" do
     context "When the Order has items" do
-      let(:order, fn -> %Order{items: [
+      let :order do
+        %Order{items: [
           {"burger", 10.0}
           {"fries", 5.2}
-        ]} end)
+        ]}
+      end
 
       it "sums the prices of its items" do
-        should Order.sum(order) == 15.2
+        assert Order.sum(order) == 15.2
       end
     end
   end
