@@ -66,6 +66,23 @@ defmodule Pavlov.Case do
     end
   end
 
+  @doc """
+  Allows lazy initialization of subjects for your tests.
+  Subjects created via "let" will never leak into other
+  contexts (defined via "describe" or "context"), not even
+  those who are children of the context where the lazy subject
+  is defined.
+
+  Example:
+    let :lazy do
+      "oh so lazy"
+    end
+
+    it "lazy initializes" do
+      assert lazy == "oh so lazy"
+    end
+  """
+
   defmacro let(name, contents) do
     quote do
       def unquote(name)(), do: unquote(contents[:do])
