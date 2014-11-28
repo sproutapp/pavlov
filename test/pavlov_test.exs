@@ -10,7 +10,7 @@ defmodule PavlovTest do
       assert 1 + 1 == 2
     end
 
-    describe "With multiple levels" do
+    context "With multiple levels" do
       it "also allows nesting" do
         assert 1 + 1 == 2
       end
