@@ -20,7 +20,7 @@ defmodule Pavlov.Syntax.Expect do
     method = elem(method, 0)
     method_name = :"to_#{method}"
 
-    def unquote(method_name)(expected, actual) do
+    def unquote(method_name)(expected, actual \\ nil) do
       assert apply(Pavlov.Matchers, unquote(method), [actual, expected])
     end
   end
