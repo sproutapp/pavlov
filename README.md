@@ -19,7 +19,7 @@ defmodule OrderSpec do
       end
 
       it "sums the prices of its items" do
-        assert Order.sum(order) == 15.2
+        expect Order.sum(order) |> to_eq 15.2
       end
     end
   end
@@ -29,7 +29,14 @@ end
 ## Included Matchers
 
 ### Object equivalence
+In `asserts` syntax:
 ```elixir
 #passes if actual == expected
-expect(actual).to eq(expected)
+assert eq(actual, expected)
+```
+
+In `expects` syntax:
+```elixir
+#passes if actual == expected
+expect actual |> to_eq expected
 ```

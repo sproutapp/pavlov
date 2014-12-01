@@ -6,17 +6,22 @@ defmodule Pavlov.Syntax.Expect do
   ## Example
     expect(actual).to eq(expected)
   """
-  """
+
+  import ExUnit.Assertions
+
+  @doc false
   def expect(subject) do
-
+    subject
   end
 
-  def to(matcher) do
+  # Dynamically defines methods for included matchers, such that:
+  # For a given matcher `eq`, defines a method `to_eq`.
+  Enum.each Pavlov.Matchers.__info__(:functions), fn(method) ->
+    method = elem(method, 0)
+    method_name = :"to_#{method}"
 
-  end
-  """
-
-  def eq(actual, expected) do
-    actual == expected
+    def unquote(method_name)(expected, actual) do
+      assert apply(Pavlov.Matchers, unquote(method), [actual, expected])
+    end
   end
 end

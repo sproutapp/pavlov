@@ -20,7 +20,6 @@ defmodule Pavlov.Case do
 
       @stack []
       import Pavlov.Case
-      import Pavlov.Syntax.Expect
       import Pavlov.Syntax.Sugar
     end
   end
