@@ -29,5 +29,11 @@ defmodule PavlovExpectTest do
         expect nil |> to_be_falsey
       end
     end
+
+    describe ".be_nil" do
+      it "compares against nil" do
+        expect nil |> to_be_nil
+      end
+    end
   end
 end

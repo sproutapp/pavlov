@@ -55,4 +55,16 @@ defmodule Pavlov.Matchers do
   def be_falsey(_, exp) do
     !exp
   end
+
+  @doc """
+  Performs a nil check with a given expression.
+
+  Example:
+  be_nil(nil, nil) # => true
+  be_nil(nil, "a") # => false
+  """
+  @spec be_nil(any, any) :: boolean
+  def be_nil(_, exp) do
+    exp == nil
+  end
 end
