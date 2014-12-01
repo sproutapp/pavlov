@@ -42,5 +42,12 @@ defmodule PavlovExpectTest do
         expect [a: 1] |> to_have_key :a
       end
     end
+
+    describe ".be_empty" do
+      it "returns true if a dict is empty" do
+        expect %{} |> to_be_empty
+        expect [] |> to_be_empty
+      end
+    end
   end
 end

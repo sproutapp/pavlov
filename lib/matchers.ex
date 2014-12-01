@@ -82,4 +82,16 @@ defmodule Pavlov.Matchers do
     Dict.has_key? dict, key
   end
 
+  @doc """
+  Checks if a Dict is empty
+
+  Example:
+    be_empty(nil, %{}) # => true
+    be_empty(nil, %{:a => 1}) # => false
+  """
+  @spec be_empty(any, t) :: boolean
+  def be_empty(_, dict) do
+    length(Dict.keys dict) == 0
+  end
+
 end
