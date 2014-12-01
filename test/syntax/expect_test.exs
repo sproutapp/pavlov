@@ -22,5 +22,12 @@ defmodule PavlovExpectTest do
         expect "pavlov" |> to_be_truthy
       end
     end
+
+    describe ".be_falsey" do
+      it "compares based on falseyness" do
+        expect false |> to_be_falsey
+        expect nil |> to_be_falsey
+      end
+    end
   end
 end
