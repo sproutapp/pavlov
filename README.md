@@ -25,3 +25,11 @@ defmodule OrderSpec do
   end
 end
 ```
+
+## Included Matchers
+
+### Object equivalence
+```elixir
+#passes if actual == expected
+expect(actual).to eq(expected)
+```
