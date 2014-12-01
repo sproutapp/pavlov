@@ -1,7 +1,8 @@
 defmodule Pavlov.Matchers do
   @moduledoc """
   Provides several matcher functions.
-  Matchers accept two values, `actual` and `expected`, and return a Boolean
+  Matchers accept up to two values, `actual` and `expected`,
+  and return a Boolean.
   """
 
   @type t :: list | map
@@ -22,11 +23,11 @@ defmodule Pavlov.Matchers do
   Performs an equality test between a given expression and 'true'.
 
   Example:
-    be_true(nil, 1==1) # => true
-    be_true(nil, "a"=="b") # => false
+    be_true(1==1) # => true
+    be_true("a"=="b") # => false
   """
-  @spec be_true(any, any) :: boolean
-  def be_true(_, exp) do
+  @spec be_true(any) :: boolean
+  def be_true(exp) do
     exp == true
   end
 
@@ -34,13 +35,13 @@ defmodule Pavlov.Matchers do
   Performs a truthy check with a given expression.
 
   Example:
-    be_truthy(nil, 1) # => true
-    be_truthy(nil, "a") # => true
-    be_truthy(nil, nil) # => false
-    be_truthy(nil, false) # => false
+    be_truthy(1) # => true
+    be_truthy("a") # => true
+    be_truthy(nil) # => false
+    be_truthy(false) # => false
   """
-  @spec be_truthy(any, any) :: boolean
-  def be_truthy(_, exp) do
+  @spec be_truthy(any) :: boolean
+  def be_truthy(exp) do
     exp
   end
 
@@ -48,13 +49,13 @@ defmodule Pavlov.Matchers do
   Performs a falsey check with a given expression.
 
   Example:
-  be_falsey(nil, 1) # => false
-  be_falsey(nil, "a") # => false
-  be_falsey(nil, nil) # => true
-  be_falsey(nil, false) # => true
+  be_falsey(1) # => false
+  be_falsey("a") # => false
+  be_falsey(nil) # => true
+  be_falsey(false) # => true
   """
-  @spec be_falsey(any, any) :: boolean
-  def be_falsey(_, exp) do
+  @spec be_falsey(any) :: boolean
+  def be_falsey(exp) do
     !exp
   end
 
@@ -62,11 +63,11 @@ defmodule Pavlov.Matchers do
   Performs a nil check with a given expression.
 
   Example:
-  be_nil(nil, nil) # => true
-  be_nil(nil, "a") # => false
+  be_nil(nil) # => true
+  be_nil("a") # => false
   """
-  @spec be_nil(any, any) :: boolean
-  def be_nil(_, exp) do
+  @spec be_nil(any) :: boolean
+  def be_nil(exp) do
     exp == nil
   end
 
@@ -86,11 +87,11 @@ defmodule Pavlov.Matchers do
   Checks if a Dict is empty
 
   Example:
-    be_empty(nil, %{}) # => true
-    be_empty(nil, %{:a => 1}) # => false
+    be_empty(%{}) # => true
+    be_empty(%{:a => 1}) # => false
   """
-  @spec be_empty(any, t) :: boolean
-  def be_empty(_, dict) do
+  @spec be_empty(t) :: boolean
+  def be_empty(dict) do
     Enum.empty? dict
   end
 

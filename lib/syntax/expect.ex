@@ -21,7 +21,12 @@ defmodule Pavlov.Syntax.Expect do
     method_name = :"to_#{method}"
 
     def unquote(method_name)(expected, actual \\ nil) do
-      assert apply(Pavlov.Matchers, unquote(method), [actual, expected])
+      args = case actual do
+        nil -> [expected]
+        _ -> [actual, expected]
+      end
+
+      assert apply(Pavlov.Matchers, unquote(method), args)
     end
   end
 end
