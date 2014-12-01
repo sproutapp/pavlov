@@ -29,4 +29,20 @@ defmodule Pavlov.Syntax.Expect do
       assert apply(Pavlov.Matchers, unquote(method), args)
     end
   end
+
+  # Dynamically defines methods for included matchers, such that:
+  # For a given matcher `eq`, defines a method `not_to_eq`.
+  Enum.each Pavlov.Matchers.__info__(:functions), fn(method) ->
+    method = elem(method, 0)
+    method_name = :"not_to_#{method}"
+
+    def unquote(method_name)(expected, actual \\ nil) do
+      args = case actual do
+        nil -> [expected]
+        _ -> [actual, expected]
+      end
+
+      assert !(apply(Pavlov.Matchers, unquote(method), args))
+    end
+  end
 end
