@@ -16,8 +16,7 @@ defmodule Pavlov.Syntax.Expect do
 
   # Dynamically defines methods for included matchers, such that:
   # For a given matcher `eq`, defines a method `to_eq`.
-  Enum.each Pavlov.Matchers.__info__(:functions), fn(method) ->
-    method = elem(method, 0)
+  Enum.each Pavlov.Matchers.__info__(:functions), fn({method, _}) ->
     method_name = :"to_#{method}"
 
     def unquote(method_name)(expected, actual \\ nil) do
@@ -32,8 +31,7 @@ defmodule Pavlov.Syntax.Expect do
 
   # Dynamically defines methods for included matchers, such that:
   # For a given matcher `eq`, defines a method `not_to_eq`.
-  Enum.each Pavlov.Matchers.__info__(:functions), fn(method) ->
-    method = elem(method, 0)
+  Enum.each Pavlov.Matchers.__info__(:functions), fn({method, _}) ->
     method_name = :"not_to_#{method}"
 
     def unquote(method_name)(expected, actual \\ nil) do
