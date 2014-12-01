@@ -49,5 +49,19 @@ defmodule PavlovExpectTest do
         expect [] |> to_be_empty
       end
     end
+
+    describe ".include" do
+      it "returns true if a member is in the List" do
+        expect [1, 2, 3] |> to_include 2
+      end
+
+      it "works with maps using tuple notation" do
+        expect %{:a => 1} |> to_include {:a, 1}
+      end
+
+      it "works with strings and partial strings" do
+        expect "a string" |> to_include "a stri"
+      end
+    end
   end
 end

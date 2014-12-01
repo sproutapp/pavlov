@@ -94,4 +94,20 @@ defmodule Pavlov.Matchers do
     Enum.empty? dict
   end
 
+  @doc """
+  Tests whether a given value is part of an array
+
+  Example:
+    include([1, 2, 3], 1) # => true
+    include([1], 2) # => false
+  """
+  @spec include(any, list|char_list) :: boolean
+  def include(member, list) do
+    cond do
+      is_bitstring(list)            -> String.contains? list, member
+      is_list(list) || is_map(list) -> Enum.member? list, member
+      true                          -> false
+    end
+  end
+
 end
