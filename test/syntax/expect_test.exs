@@ -14,5 +14,13 @@ defmodule PavlovExpectTest do
         expect (1==1) |> to_be_true
       end
     end
+
+    describe ".be_truthy" do
+      it "compares based on truthiness" do
+        expect 1 |> to_be_truthy
+        expect true |> to_be_truthy
+        expect "pavlov" |> to_be_truthy
+      end
+    end
   end
 end

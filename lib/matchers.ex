@@ -27,4 +27,18 @@ defmodule Pavlov.Matchers do
   def be_true(_, exp) do
     exp == true
   end
+
+  @doc """
+  Performs a truthy check with a given expression.
+
+  Example:
+    be_truthy(nil, 1) # => true
+    be_truthy(nil, "a") # => true
+    be_truthy(nil, nil) # => false
+    be_truthy(nil, false) # => false
+  """
+  @spec be_truthy(any, any) :: boolean
+  def be_truthy(_, exp) do
+    exp
+  end
 end
