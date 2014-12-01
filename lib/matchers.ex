@@ -91,7 +91,7 @@ defmodule Pavlov.Matchers do
   """
   @spec be_empty(any, t) :: boolean
   def be_empty(_, dict) do
-    length(Dict.keys dict) == 0
+    Enum.empty? dict
   end
 
 end
