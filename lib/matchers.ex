@@ -90,9 +90,13 @@ defmodule Pavlov.Matchers do
     be_empty(%{}) # => true
     be_empty(%{:a => 1}) # => false
   """
-  @spec be_empty(t) :: boolean
-  def be_empty(dict) do
-    Enum.empty? dict
+  @spec be_empty(t|char_list) :: boolean
+  def be_empty(list) do
+    cond do
+      is_bitstring(list)            -> String.length(list) == 0
+      is_list(list) || is_map(list) -> Enum.empty? list
+      true                          -> false
+    end
   end
 
   @doc """

@@ -48,6 +48,10 @@ defmodule PavlovExpectTest do
         expect %{} |> to_be_empty
         expect [] |> to_be_empty
       end
+
+      it "returns true if a string is empty" do
+        expect "" |> to_be_empty
+      end
     end
 
     describe ".include" do
