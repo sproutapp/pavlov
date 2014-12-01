@@ -27,6 +27,12 @@ end
 
 ## Included Matchers
 
+When using the `expects` syntax, all matchers have negative counterparts, ie:
+```elixir
+expect 1 |> not_to_eq 2
+expect(1 > 5) |> not_to_be_true
+```
+
 ### eq
 In `asserts` syntax:
 ```elixir

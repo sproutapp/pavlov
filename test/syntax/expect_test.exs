@@ -7,11 +7,19 @@ defmodule PavlovExpectTest do
       it "compares based on equality" do
         expect 1 |> to_eq 1
       end
+
+      it "supports a negative expression" do
+        expect 1 |> not_to_eq 2
+      end
     end
 
     describe ".be_true" do
       it "compares against 'true'" do
         expect (1==1) |> to_be_true
+      end
+
+      it "supports a negative expression" do
+        expect (1==2) |> not_to_be_true
       end
     end
 
@@ -21,6 +29,11 @@ defmodule PavlovExpectTest do
         expect true |> to_be_truthy
         expect "pavlov" |> to_be_truthy
       end
+
+      it "supports a negative expression" do
+        expect false |> not_to_be_truthy
+        expect nil |> not_to_be_truthy
+      end
     end
 
     describe ".be_falsey" do
@@ -28,11 +41,21 @@ defmodule PavlovExpectTest do
         expect false |> to_be_falsey
         expect nil |> to_be_falsey
       end
+
+      it "supports a negative expression" do
+        expect 1 |> not_to_be_falsey
+        expect true |> not_to_be_falsey
+        expect "pavlov" |> not_to_be_falsey
+      end
     end
 
     describe ".be_nil" do
       it "compares against nil" do
         expect nil |> to_be_nil
+      end
+
+      it "supports a negative expression" do
+        expect "nil" |> not_to_be_nil
       end
     end
 
@@ -40,6 +63,11 @@ defmodule PavlovExpectTest do
       it "returns true if a dict has a key" do
         expect %{:a => 1} |> to_have_key :a
         expect [a: 1] |> to_have_key :a
+      end
+
+      it "supports a negative expression" do
+        expect %{:a => 1} |> not_to_have_key :b
+        expect [a: 1] |> not_to_have_key :b
       end
     end
 
@@ -51,6 +79,12 @@ defmodule PavlovExpectTest do
 
       it "returns true if a string is empty" do
         expect "" |> to_be_empty
+      end
+
+      it "supports a negative expression" do
+        expect %{:a => 1} |> not_to_be_empty
+        expect [a: 1] |> not_to_be_empty
+        expect "asd" |> not_to_be_empty
       end
     end
 
@@ -65,6 +99,12 @@ defmodule PavlovExpectTest do
 
       it "works with strings and partial strings" do
         expect "a string" |> to_include "a stri"
+      end
+
+      it "supports a negative expression" do
+        expect [1, 2, 3] |> not_to_include 5
+        expect %{:a => 1} |> not_to_include {:a, 5}
+        expect "a string" |> not_to_include "a strict"
       end
     end
   end
