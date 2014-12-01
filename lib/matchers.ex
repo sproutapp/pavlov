@@ -4,6 +4,8 @@ defmodule Pavlov.Matchers do
   Matchers accept two values, `actual` and `expected`, and return a Boolean
   """
 
+  @type t :: list | map
+
   @doc """
   Performs an equality test between two values using ==.
 
@@ -67,4 +69,17 @@ defmodule Pavlov.Matchers do
   def be_nil(_, exp) do
     exp == nil
   end
+
+  @doc """
+  Performs has_key? operation on a Dict.
+
+  Example:
+    have_key(%{:a => 1}, :a) # => true
+    have_key(%{:a => 1}, :b) # => false
+  """
+  @spec have_key(node, t) :: boolean
+  def have_key(key, dict) do
+    Dict.has_key? dict, key
+  end
+
 end

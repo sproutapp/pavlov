@@ -35,5 +35,12 @@ defmodule PavlovExpectTest do
         expect nil |> to_be_nil
       end
     end
+
+    describe ".have_key" do
+      it "returns true if a dict has a key" do
+        expect %{:a => 1} |> to_have_key :a
+        expect [a: 1] |> to_have_key :a
+      end
+    end
   end
 end
