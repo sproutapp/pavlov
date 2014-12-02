@@ -88,6 +88,11 @@ defmodule Pavlov.Case do
     end
   end
 
+  @doc """
+  Defines a group of tests as pending.
+  Any other contexts nested within an xdescribe will not run
+  as well.
+  """
   defmacro xdescribe(desc, _ \\ quote(do: _), contents) do
     quote do
       describe unquote(desc), _, true, unquote(contents)
