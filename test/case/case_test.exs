@@ -27,6 +27,30 @@ defmodule PavlovCaseTest do
     end
   end
 
+  xdescribe "A skipped describe" do
+    it "is never run" do
+      assert 1 + 3 == 2
+    end
+
+    describe "A normal Context inside a skipped describe" do
+      it "is never run" do
+        assert 1 + 3 == 2
+      end
+    end
+  end
+
+  xcontext "A skipped Context" do
+    it "is never run" do
+      assert 1 + 3 == 2
+    end
+
+    context "A normal Context inside a skipped Context" do
+      it "is never run" do
+        assert 1 + 3 == 2
+      end
+    end
+  end
+
   describe ".let" do
     setup_all do
       Agent.start_link(fn -> 0 end, name: :memoized_let)

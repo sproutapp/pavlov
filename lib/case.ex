@@ -19,6 +19,8 @@ defmodule Pavlov.Case do
       use ExUnit.Case, async: unquote(async)
 
       @stack []
+      @pending false
+
       import Pavlov.Case
       import Pavlov.Callbacks
       import Pavlov.Syntax.Sugar
@@ -34,9 +36,9 @@ defmodule Pavlov.Case do
       assert true == true
     end
   """
-  defmacro it(description, var \\ quote(do: _), contents) do
+  defmacro it(desc, var \\ quote(do: _), contents) do
     quote do
-      defit Enum.join(@stack, "") <> unquote(description), unquote(var) do
+      defit Enum.join(@stack, "") <> unquote(desc), unquote(var), @pending do
         unquote(contents)
       end
     end
@@ -63,16 +65,18 @@ defmodule Pavlov.Case do
   You can nest your tests under a descriptive name.
   Tests can be infinitely nested.
   """
-  defmacro describe(description, _ \\ quote(do: _), contents) do
+  defmacro describe(desc, _ \\ quote(do: _), pending \\ false, contents) do
     quote do
-      @stack Enum.concat(@stack, [unquote(description) <> ", "])
+      @stack Enum.concat(@stack, [unquote(desc) <> ", "])
       # Closure the old stack so we can use it in defmodule
-      oldStack = Enum.concat @stack, []
+      old_stack = Enum.concat @stack, []
+      pending   = @pending || unquote(pending)
 
       # Defines a new module per describe, thus scoping .let
-      defmodule Module.concat(__MODULE__, unquote(description)) do
+      defmodule Module.concat(__MODULE__, unquote(desc)) do
         use ExUnit.Case
-        @stack oldStack
+        @stack old_stack
+        @pending pending
 
         unquote(contents)
       end
@@ -81,6 +85,12 @@ defmodule Pavlov.Case do
       if Enum.count(@stack) > 0 do
         @stack Enum.take(@stack, Enum.count(@stack) - 1)
       end
+    end
+  end
+
+  defmacro xdescribe(desc, _ \\ quote(do: _), contents) do
+    quote do
+      describe unquote(desc), _, true, unquote(contents)
     end
   end
 

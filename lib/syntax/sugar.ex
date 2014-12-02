@@ -11,4 +11,12 @@ defmodule Pavlov.Syntax.Sugar do
     end
   end
 
+  for xdescribe_alias <- [:xcontext] do
+    defmacro unquote(xdescribe_alias)(description, var \\ quote(do: _), contents) do
+      quote do
+        Pavlov.Case.xdescribe(unquote(description), unquote(var), unquote(contents))
+      end
+    end
+  end
+
 end
