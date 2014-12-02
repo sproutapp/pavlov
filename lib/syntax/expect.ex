@@ -40,7 +40,7 @@ defmodule Pavlov.Syntax.Expect do
         _ -> [actual, expected]
       end
 
-      assert !(apply(Pavlov.Matchers, unquote(method), args))
+      refute apply(Pavlov.Matchers, unquote(method), args)
     end
   end
 end
