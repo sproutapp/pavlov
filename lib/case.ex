@@ -42,6 +42,15 @@ defmodule Pavlov.Case do
     end
   end
 
+  @doc """
+  "xit" allows you specify a pending test, meaning that it is never run.
+
+  ## Example
+    xit "is the truth" do
+      # This will never run
+      assert true == true
+    end
+  """
   defmacro xit(description, var \\ quote(do: _), contents) do
     quote do
       defit Enum.join(@stack, "") <> unquote(description), unquote(var), true do
