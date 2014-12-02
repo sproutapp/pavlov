@@ -1,8 +1,12 @@
 defmodule PavlovCaseTest do
-  use Pavlov.Case, async: true
+  use Pavlov.Case, async: true, trace: true
 
   it "is the truth" do
     assert 1 + 1 == 2
+  end
+
+  xit "doesn't run this test" do
+    assert false
   end
 
   describe "Context" do
