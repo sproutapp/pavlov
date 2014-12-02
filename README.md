@@ -2,7 +2,7 @@
 
 A BDD framework for your Elixir projects.
 
-Simple usage:
+Here's the TL;DR; example:
 
 ```elixir
 defmodule OrderSpec do
@@ -25,6 +25,18 @@ defmodule OrderSpec do
 end
 ```
 
+## `Describe` and `Context`
+You may use the `describe` and `context` constructs to group tests together in a logical way. Although `context` is just an alias for `describe`, you may use it to add some extra meaning to your tests, ie. you can use `contexts` within a `described` module function to simulate different conditions under which your function should work.
+
+## `Expects` syntax
+
+You may use the regular ExUnit `assert` syntax if you wish, but Pavlov includes
+an `expect` syntax that makes your tests more readable.
+
+If you wish to use this syntax, simply import the `Pavlov.Syntax.Expect` module.
+
+All core matchers are supported under both syntaxes.
+
 ## Included Matchers
 
 When using the `expects` syntax, all matchers have negative counterparts, ie:
@@ -33,7 +45,7 @@ expect 1 |> not_to_eq 2
 expect(1 > 5) |> not_to_be_true
 ```
 
-### eq
+### `eq`
 In `asserts` syntax:
 ```elixir
 #passes if actual == expected
@@ -46,7 +58,7 @@ In `expects` syntax:
 expect 1 |> to_eq 1
 ```
 
-### be_true
+### `be_true`
 In `asserts` syntax:
 ```elixir
 #passes if expected == true
@@ -59,7 +71,7 @@ In `expects` syntax:
 expect(1 > 0) |> to_be_true
 ```
 
-### be_truthy
+### `be_truthy`
 In `asserts` syntax:
 ```elixir
 #passes if expected is truthy
@@ -72,7 +84,7 @@ In `expects` syntax:
 expect "something" |> to_be_truthy
 ```
 
-### be_falsey
+### `be_falsey`
 In `asserts` syntax:
 ```elixir
 #passes if expected is falsey
@@ -85,7 +97,7 @@ In `expects` syntax:
 expect false |> to_be_falsey
 ```
 
-### be_nil
+### `be_nil`
 In `asserts` syntax:
 ```elixir
 #passes if expected is nil
@@ -98,7 +110,7 @@ In `expects` syntax:
 expect nil |> to_be_nil
 ```
 
-### have_key
+### `have_key`
 In `asserts` syntax:
 ```elixir
 #passes if Dict has member as a key
@@ -111,7 +123,7 @@ In `expects` syntax:
 expect %{:a => 1} |> to_have_key :a
 ```
 
-### be_empty
+### `be_empty`
 In `asserts` syntax:
 ```elixir
 #passes if Dict is empty
@@ -152,8 +164,7 @@ In `expects` syntax:
 expect "" |> to_be_empty
 ```
 
-
-### include
+### `include`
 In `asserts` syntax:
 ```elixir
 #passes if List includes member
