@@ -68,7 +68,7 @@ defmodule Pavlov.Matchers do
   """
   @spec be_nil(any) :: boolean
   def be_nil(exp) do
-    exp == nil
+    is_nil exp
   end
 
   @doc """
