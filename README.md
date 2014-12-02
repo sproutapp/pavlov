@@ -193,3 +193,34 @@ In `expects` syntax:
 #passes if String contains partial
 expect "a string" |> to_include "a_stri"
 ```
+
+## Skipping tests
+Pavlov runs with the `--exclude pending:true` configuration by default, which
+means that tests tagged with `:pending` will not be run.
+
+Pavlov offers several convenience methods to skip your tests, BDD style:
+
+### xit
+Marks a specific test as pending and will not run it.
+
+```elixir
+xit "does not run" do
+  # This will never run
+end
+```
+
+### xdescribe/xcontext
+Marks a group of tests as pending and will not run them. Just as `describe`
+and `context`, `xdescribe` and `xcontext` are analogous.
+
+```elixir
+xdescribe "A pending group" do
+  it "does not run" do
+    # This will never run
+  end
+
+  it "does not run either" do
+    # This will never run either
+  end
+end
+```
