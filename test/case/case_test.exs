@@ -1,8 +1,12 @@
 defmodule PavlovCaseTest do
-  use Pavlov.Case, async: true
+  use Pavlov.Case, async: true, trace: true
 
   it "is the truth" do
     assert 1 + 1 == 2
+  end
+
+  xit "doesn't run this test" do
+    assert false
   end
 
   describe "Context" do
@@ -20,6 +24,30 @@ defmodule PavlovCaseTest do
   describe "Another Context" do
     it "allows nesting" do
       assert 1 + 1 == 2
+    end
+  end
+
+  xdescribe "A skipped describe" do
+    it "is never run" do
+      assert 1 + 3 == 2
+    end
+
+    describe "A normal Context inside a skipped describe" do
+      it "is never run" do
+        assert 1 + 3 == 2
+      end
+    end
+  end
+
+  xcontext "A skipped Context" do
+    it "is never run" do
+      assert 1 + 3 == 2
+    end
+
+    context "A normal Context inside a skipped Context" do
+      it "is never run" do
+        assert 1 + 3 == 2
+      end
     end
   end
 

@@ -19,6 +19,8 @@ defmodule Pavlov.Case do
       use ExUnit.Case, async: unquote(async)
 
       @stack []
+      @pending false
+
       import Pavlov.Case
       import Pavlov.Callbacks
       import Pavlov.Syntax.Sugar
@@ -34,9 +36,26 @@ defmodule Pavlov.Case do
       assert true == true
     end
   """
-  defmacro it(description, var \\ quote(do: _), contents) do
+  defmacro it(desc, var \\ quote(do: _), contents) do
     quote do
-      defit Enum.join(@stack, "") <> unquote(description), unquote(var) do
+      defit Enum.join(@stack, "") <> unquote(desc), unquote(var), @pending do
+        unquote(contents)
+      end
+    end
+  end
+
+  @doc """
+  "xit" allows you specify a pending test, meaning that it is never run.
+
+  ## Example
+    xit "is the truth" do
+      # This will never run
+      assert true == true
+    end
+  """
+  defmacro xit(description, var \\ quote(do: _), contents) do
+    quote do
+      defit Enum.join(@stack, "") <> unquote(description), unquote(var), true do
         unquote(contents)
       end
     end
@@ -46,16 +65,18 @@ defmodule Pavlov.Case do
   You can nest your tests under a descriptive name.
   Tests can be infinitely nested.
   """
-  defmacro describe(description, _ \\ quote(do: _), contents) do
+  defmacro describe(desc, _ \\ quote(do: _), pending \\ false, contents) do
     quote do
-      @stack Enum.concat(@stack, [unquote(description) <> ", "])
+      @stack Enum.concat(@stack, [unquote(desc) <> ", "])
       # Closure the old stack so we can use it in defmodule
-      oldStack = Enum.concat @stack, []
+      old_stack = Enum.concat @stack, []
+      pending   = @pending || unquote(pending)
 
       # Defines a new module per describe, thus scoping .let
-      defmodule Module.concat(__MODULE__, unquote(description)) do
+      defmodule Module.concat(__MODULE__, unquote(desc)) do
         use ExUnit.Case
-        @stack oldStack
+        @stack old_stack
+        @pending pending
 
         unquote(contents)
       end
@@ -64,6 +85,17 @@ defmodule Pavlov.Case do
       if Enum.count(@stack) > 0 do
         @stack Enum.take(@stack, Enum.count(@stack) - 1)
       end
+    end
+  end
+
+  @doc """
+  Defines a group of tests as pending.
+  Any other contexts nested within an xdescribe will not run
+  as well.
+  """
+  defmacro xdescribe(desc, _ \\ quote(do: _), contents) do
+    quote do
+      describe unquote(desc), _, true, unquote(contents)
     end
   end
 
@@ -92,7 +124,7 @@ defmodule Pavlov.Case do
   end
 
   @doc false
-  defmacro defit(message, var \\ quote(do: _), contents) do
+  defmacro defit(message, var \\ quote(do: _), pending \\ false, contents) do
     contents =
       case contents do
         [do: _] ->
@@ -112,9 +144,29 @@ defmodule Pavlov.Case do
 
     quote bind_quoted: binding do
       message = :"#{message}"
-      ExUnit.Case.__on_definition__(__ENV__, message)
+      Pavlov.Case.__on_definition__(__ENV__, message, pending)
 
       def unquote(message)(unquote(var)), do: unquote(contents)
+    end
+  end
+
+  @doc false
+  def __on_definition__(env, name, pending \\ false) do
+    mod   = env.module
+    tags  = Module.get_attribute(mod, :tag) ++ Module.get_attribute(mod, :moduletag)
+    if pending do tags = [tags|[:pending]] end
+    tags  = tags |> normalize_tags |> Map.merge(%{line: env.line, file: env.file})
+
+    Module.put_attribute(mod, :ex_unit_tests,
+    %ExUnit.Test{name: name, case: mod, tags: tags})
+
+    Module.delete_attribute(mod, :tag)
+  end
+
+  defp normalize_tags(tags) do
+    Enum.reduce Enum.reverse(tags), %{}, fn
+    tag, acc when is_atom(tag) -> Map.put(acc, tag, true)
+    tag, acc when is_list(tag) -> Dict.merge(acc, tag)
     end
   end
 end
