@@ -211,7 +211,7 @@ means that tests tagged with `:pending` will not be run.
 
 Pavlov offers several convenience methods to skip your tests, BDD style:
 
-### xit
+### `xit`
 Marks a specific test as pending and will not run it.
 
 ```elixir
@@ -220,7 +220,7 @@ xit "does not run" do
 end
 ```
 
-### xdescribe/xcontext
+### `xdescribe/xcontext`
 Marks a group of tests as pending and will not run them. Just as `describe`
 and `context`, `xdescribe` and `xcontext` are analogous.
 
