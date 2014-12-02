@@ -18,5 +18,16 @@ defmodule PavlovCallbackTest do
         expect context[:hello] |> to_eq "world"
       end
     end
+
+    describe "before :all" do
+      before :all do
+        {:ok, [context: :setup_all]}
+      end
+
+      it "runs the callback before all tests", context do
+        expect context[:context] |> to_eq :setup_all
+      end
+
+    end
   end
 end
