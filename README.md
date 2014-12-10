@@ -33,7 +33,16 @@ You may use the `describe` and `context` constructs to group tests together in a
 You may use the regular ExUnit `assert` syntax if you wish, but Pavlov includes
 an `expect` syntax that makes your tests more readable.
 
-If you wish to use this syntax, simply import the `Pavlov.Syntax.Expect` module.
+If you wish to use this syntax, simply import the `Pavlov.Syntax.Expect` at the
+beginning of your Test module:
+
+```elixir
+defmodule MyTest do
+  use Pavlov.Case, async: true
+  import Pavlov.Syntax.Expect
+  #...
+end
+```
 
 All core matchers are supported under both syntaxes.
 
@@ -204,6 +213,55 @@ In `expects` syntax:
 #passes if String contains partial
 expect "a string" |> to_include "a_stri"
 ```
+
+## Callbacks
+For now, Pavlov only supports callbacks that run before test cases. [ExUnit's
+`on_exit` callback](http://elixir-lang.org/docs/stable/ex_unit/ExUnit.Callbacks.html#on_exit/2) is still fully supported though, and may be used normally inside your `before` callbacks.
+
+### before(:each)
+Runs the specified code before every test case.
+
+```elixir
+describe "before :each" do
+  before :each do
+    IO.puts "A test is about to start"
+    :ok
+  end
+
+  it "does something" do
+    #...
+  end
+
+  it "does something else" do
+    #...
+  end
+end
+```
+
+In this case, `"A test is about to start"` is printed twice to the console.
+
+### before(:all)
+Runs the specified code once before any tests run.
+
+```elixir
+describe "before :each" do
+  before :each do
+    IO.puts "This suite is about to run"
+    :ok
+  end
+
+  it "does something" do
+    #...
+  end
+
+  it "does something else" do
+    #...
+  end
+end
+```
+In this case, `"This suite is about to run"` is printed once to the console.
+
+###
 
 ## Skipping tests
 Pavlov runs with the `--exclude pending:true` configuration by default, which
