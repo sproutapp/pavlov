@@ -146,7 +146,9 @@ defmodule Pavlov.Case do
       message = :"#{message}"
       Pavlov.Case.__on_definition__(__ENV__, message, pending)
 
-      def unquote(message)(unquote(var)), do: unquote(contents)
+      def unquote(message)(unquote(var)) do
+        unquote(contents)
+      end
     end
   end
 

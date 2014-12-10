@@ -261,7 +261,19 @@ end
 ```
 In this case, `"This suite is about to run"` is printed once to the console.
 
-###
+## Mocking
+
+```elixir
+before :each do
+  allow HTTPotion |> to_receive :get |> and_return "<html></html>"
+end
+
+it "gets a page" do
+  HTTPotion.get("http://example.com")
+
+  expect HTTPotion |> to_have_received :get |> with "http://example.com"
+end
+```
 
 ## Skipping tests
 Pavlov runs with the `--exclude pending:true` configuration by default, which
