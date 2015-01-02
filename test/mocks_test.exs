@@ -7,19 +7,19 @@ defmodule PavlovMocksTest do
 
   describe "Mocks" do
     describe "#to_have_received" do
-      it "asserts that a mock was called" do
-        allow(Mockable) |> to_receive(:do_something) |> and_return({:error})
+      it "asserts that a simple mock was called" do
+        allow(Mockable) |> to_receive(do_something: fn -> :error end)
 
         result = Mockable.do_something()
 
         expect Mockable |> to_have_received :do_something
-        expect result |> to_eq({:error})
+        expect result |> to_eq(:error)
       end
     end
 
     describe "#not_to_have_received" do
       it "refutes that a mock was called" do
-        allow(Mockable) |> to_receive(:do_something) |> and_return({:error})
+        allow(Mockable) |> to_receive(do_something: fn -> :error end)
 
         expect Mockable |> not_to_have_received :do_something
       end
@@ -39,18 +39,36 @@ defmodule PavlovMocksTest do
       expect Mockable |> to_have_received :do_something
       expect result |> to_be_nil
     end
+
+    it "allows setting expectations matching method and arguments" do
+      allow(Mockable) |> to_receive(do_with_args: fn(_) -> :ok end )
+
+      Mockable.do_with_args("a string")
+
+      expect Mockable |> to_have_received :do_with_args |> with "a string"
+    end
+
+    it "allows mocking with arguments to return something" do
+      allow(Mockable) |> to_receive(do_with_args: fn(_) -> :error end )
+
+      result = Mockable.do_with_args("a string")
+
+      expect Mockable |> to_have_received :do_with_args |> with "a string"
+      expect result |> to_eq :error
+    end
   end
 
   context "Callbacks" do
     before :each do
-      allow(Mockable) |> to_receive(:do_something) |> and_return({:error})
+      allow(Mockable) |> to_receive(do_something: fn -> :error end)
+      :ok
     end
 
     it "supports mocking at setup time" do
       result = Mockable.do_something()
 
       expect Mockable |> to_have_received :do_something
-      expect result |> to_eq({:error})
+      expect result |> to_eq(:error)
     end
 
     # Mocking across contexts will not work
@@ -60,19 +78,27 @@ defmodule PavlovMocksTest do
         result = Mockable.do_something()
 
         expect Mockable |> to_have_received :do_something
-        expect result |> to_eq({:error})
+        expect result |> to_eq(:error)
       end
     end
   end
 
   context "Using asserts syntax" do
     describe "#called" do
-      it "supports asserts syntax" do
-        allow(Mockable) |> to_receive(:do_something) |> and_return({:error})
+      it "works for simple mocks" do
+        allow(Mockable) |> to_receive(do_something: fn -> :error end)
 
         Mockable.do_something()
 
         assert called Mockable.do_something
+      end
+
+      it "works for mocks with arguments" do
+        allow(Mockable) |> to_receive(do_with_args: fn(_) -> :ok end)
+
+        Mockable.do_with_args("a string")
+
+        assert called Mockable.do_with_args("a string")
       end
     end
   end
