@@ -214,6 +214,45 @@ In `expects` syntax:
 expect "a string" |> to_include "a_stri"
 ```
 
+### `have_raised`
+In `asserts` syntax:
+```elixir
+#passes if the given function raises an ArithmeticError
+have_raised(fn -> 1 + "test") end, ArithmeticError)
+```
+
+In `expects` syntax:
+```elixir
+#passes if the given function raises an ArithmeticError
+expect fn -> 1 + "test" end |> to_have_raised ArithmeticError
+```
+
+### `have_thrown`
+In `asserts` syntax:
+```elixir
+#passes if the given function throws a given value
+have_thrown(fn -> throw "x" end, "x")
+```
+
+In `expects` syntax:
+```elixir
+#passes if the given function throws a given value
+expect fn -> throw "x" end |> to_have_thrown "x"
+```
+
+### `have_exited`
+In `asserts` syntax:
+```elixir
+#passes if the given function exited the process
+have_thrown(fn -> exit "bye bye!" end)
+```
+
+In `expects` syntax:
+```elixir
+#passes if the given function exited the process
+expect fn -> exit "bye bye!" end |> to_have_exited
+```
+
 ## Callbacks
 For now, Pavlov only supports callbacks that run before test cases. [ExUnit's
 `on_exit` callback](http://elixir-lang.org/docs/stable/ex_unit/ExUnit.Callbacks.html#on_exit/2) is still fully supported though, and may be used normally inside your `before` callbacks.
