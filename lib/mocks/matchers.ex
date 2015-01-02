@@ -1,14 +1,20 @@
 defmodule Pavlov.Mocks.Matchers do
   import ExUnit.Assertions
 
+  def to_have_received(module, tuple) when is_tuple(tuple) do
+    {method, args} = tuple
+    assert _called(module, method, List.flatten [args])
+  end
   def to_have_received(module, method) do
-    {method, args} = parse_method method
-    assert _called(module, method, args)
+    assert _called(module, method, [])
   end
 
+  def not_to_have_received(module, tuple) when is_tuple(tuple) do
+    {method, args} = tuple
+    refute _called(module, method, List.flatten [args])
+  end
   def not_to_have_received(module, method) do
-    {method, args} = parse_method method
-    refute _called(module, method, args)
+    refute _called(module, method, [])
   end
 
   def with(method, args) do
@@ -23,17 +29,6 @@ defmodule Pavlov.Mocks.Matchers do
 
   defp _called(module, f, args \\ []) do
     :meck.called module, f, args
-  end
-
-  defp parse_method(tuple) do
-    args = []
-    method = tuple
-
-    if is_tuple tuple do
-      {method, args} = tuple
-    end
-
-    {method, List.flatten [args]}
   end
 
 end
