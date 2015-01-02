@@ -6,7 +6,7 @@ defmodule PavlovMocksTest do
   alias Fixtures.Mockable, as: Mockable
 
   describe "Mocks" do
-    describe "#to_have_received" do
+    describe ".to_have_received" do
       it "asserts that a simple mock was called" do
         allow(Mockable) |> to_receive(do_something: fn -> :error end)
 
@@ -17,7 +17,7 @@ defmodule PavlovMocksTest do
       end
     end
 
-    describe "#not_to_have_received" do
+    describe ".not_to_have_received" do
       it "refutes that a mock was called" do
         allow(Mockable) |> to_receive(do_something: fn -> :error end)
 
@@ -84,7 +84,7 @@ defmodule PavlovMocksTest do
   end
 
   context "Using asserts syntax" do
-    describe "#called" do
+    describe ".called" do
       it "works for simple mocks" do
         allow(Mockable) |> to_receive(do_something: fn -> :error end)
 

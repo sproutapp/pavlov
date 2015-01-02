@@ -107,5 +107,35 @@ defmodule PavlovExpectTest do
         expect "a string" |> not_to_include "a strict"
       end
     end
+
+    describe ".have_raised" do
+      it "returns true if a given function raised a given exception" do
+        expect fn -> 1 + "test" end |> to_have_raised ArithmeticError
+      end
+
+      it "supports a negative expression" do
+        expect fn -> 1 + 2 end |> not_to_have_raised ArithmeticError
+      end
+    end
+
+    describe ".have_thrown" do
+      it "returns true if a given function threw a given value" do
+        expect fn -> throw("x") end |> to_have_thrown "x"
+      end
+
+      it "supports a negative expression" do
+        expect fn -> throw("x") end |> not_to_have_thrown "y"
+      end
+    end
+
+    describe ".have_exited" do
+      it "returns true if a given function exited" do
+        expect fn -> exit "bye!" end |> to_have_exited
+      end
+
+      it "supports a negative expression" do
+        expect fn -> :ok end |> not_to_have_exited
+      end
+    end
   end
 end

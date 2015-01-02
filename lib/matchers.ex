@@ -115,4 +115,64 @@ defmodule Pavlov.Matchers do
     end
   end
 
+  @doc """
+  Tests whether a given exception was raised.
+
+  Example:
+    have_raised(fn -> 1 + "test") end, ArithmeticError) # => true
+    have_raised(fn -> 1 + 2) end, ArithmeticError) # => false
+  """
+  @spec have_raised(any, function) :: boolean
+  def have_raised(exception, fun) do
+    raised = try do
+      fun.()
+    rescue
+      e in ArithmeticError -> true
+    end
+
+    case raised do
+      true  -> true
+      _     -> false
+    end
+  end
+
+  @doc """
+  Tests whether a given value was thrown.
+
+  Example:
+    have_thrown(fn -> throw "x" end, "x") # => true
+    have_thrown(fn -> throw "x" end, "y") # => false
+  """
+  @spec have_thrown(any, function) :: boolean
+  def have_thrown(expected, fun) do
+    value = try do
+      fun.()
+    catch
+      x -> x
+    end
+
+    value == expected
+  end
+
+  @doc """
+  Tests whether the process has exited.
+
+  Example:
+    have_exited(fn -> exit "x" end) # => true
+    have_thrown(fn -> :ok end) # => false
+  """
+  @spec have_exited(function) :: boolean
+  def have_exited(fun) do
+    exited = try do
+      fun.()
+    catch
+      :exit, _ -> true
+    end
+
+    case exited do
+      true  -> true
+      _     -> false
+    end
+  end
+
 end
