@@ -261,7 +261,24 @@ end
 ```
 In this case, `"This suite is about to run"` is printed once to the console.
 
-###
+## Mocking
+Pavlov provides facilities to mock functions in your Elixir modules. This is
+achieved using [Meck](https://github.com/eproxus/meck), an erlang mocking tool.
+
+Here's a simple example using [HTTPotion](https://github.com/myfreeweb/httpotion):
+
+```elixir
+before :each do
+  allow HTTPotion |> to_receive :get |> and_return "<html></html>"
+end
+
+it "gets a page" do
+  result = HTTPotion.get("http://example.com")
+
+  expect HTTPotion |> to_have_received :get
+  expect result |> to_eq "<html></html>"
+end
+```
 
 ## Skipping tests
 Pavlov runs with the `--exclude pending:true` configuration by default, which
