@@ -1,6 +1,6 @@
 defmodule Pavlov.Syntax.Sugar do
   @moduledoc """
-  Provides an alternative DSLs for BDD methods.
+  Provides an alternative DSL for BDD methods.
   """
 
   for describe_alias <- [:context] do

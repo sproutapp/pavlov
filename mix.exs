@@ -1,12 +1,23 @@
 defmodule Pavlov.Mixfile do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [app: :pavlov,
-     version: "0.0.1",
+     version: @version,
      elixir: "~> 1.0",
      deps: deps,
-     elixirc_paths: paths(Mix.env)]
+     elixirc_paths: paths(Mix.env),
+
+     # Hex
+     description: description,
+     package: package,
+
+     # Docs
+     name: "Pavlov",
+     docs: [source_ref: "v#{@version}",
+            source_url: "https://github.com/sproutapp/pavlov"]]
   end
 
   # Configuration for the OTP application
@@ -27,8 +38,25 @@ defmodule Pavlov.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:meck, "~> 0.8.2"}
+      {:meck, "~> 0.8.2"},
+      {:ex_doc, "~> 0.6", only: :docs},
+      {:earmark, "~> 0.1", only: :docs},
+      {:inch_ex, only: :docs}
     ]
+  end
+
+  defp description do
+    """
+    Pavlov is a BDD library for your Elixir projects, allowing you to write
+    expressive unit tests that tell the story of how your application behaves.
+    The syntax tries to follow RSpec's wherever possible.
+    """
+  end
+
+  defp package do
+    [contributors: ["Bruno Abrantes"],
+     licenses: ["MIT"],
+     links: %{"GitHub" => "https://github.com/sproutapp/pavlov"}]
   end
 
   defp paths(:test), do: ["lib", "test/fixtures"]
