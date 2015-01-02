@@ -6,6 +6,7 @@ defmodule Pavlov.Mixfile do
      version: "0.0.1",
      elixir: "~> 1.0",
      deps: deps]
+     elixirc_paths: paths(Mix.env),
   end
 
   # Configuration for the OTP application
@@ -29,4 +30,6 @@ defmodule Pavlov.Mixfile do
       {:meck, "~> 0.8.2"}
     ]
   end
+  defp paths(:test), do: ["lib", "test/fixtures"]
+  defp paths(_), do: ["lib"]
 end
