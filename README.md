@@ -269,7 +269,7 @@ Here's a simple example using [HTTPotion](https://github.com/myfreeweb/httpotion
 
 ```elixir
 before :each do
-  allow HTTPotion |> to_receive :get |> and_return "<html></html>"
+  allow HTTPotion |> to_receive(get: fn(url) -> "<html></html>" end)
 end
 
 it "gets a page" do
@@ -284,13 +284,43 @@ Expectations on mocks also work using `asserts` syntax via the `called` matcher:
 
 ```elixir
 before :each do
-  allow HTTPotion |> to_receive :get |> and_return "<html></html>"
+  allow HTTPotion |> to_receive(get: fn(url) -> "<html></html>" end)
 end
 
 it "gets a page" do
   HTTPotion.get("http://example.com")
 
   assert called HTTPotion.get
+end
+```
+
+### Mocks with arguments
+You can also perform assertions on what arguments were passed to a mocked
+method:
+
+```elixir
+before :each do
+  allow HTTPotion |> to_receive(get: fn(url) -> "<html></html>" end)
+end
+
+it "gets a page" do
+  HTTPotion.get("http://example.com")
+
+  expect HTTPotion |> to_have_received :get |> with "http://example.com"
+end
+```
+
+In `asserts` syntax:
+
+```elixir
+before :each do
+  allow HTTPotion |> to_receive (get: fn(url) -> url end )
+end
+
+it "gets a page" do
+  HTTPotion.get("http://example.com")
+
+  assert called HTTPotion.get("http://example.com")
 end
 ```
 
