@@ -64,4 +64,16 @@ defmodule PavlovMocksTest do
       end
     end
   end
+
+  context "Using asserts syntax" do
+    describe "#called" do
+      it "supports asserts syntax" do
+        allow(Mockable) |> to_receive(:do_something) |> and_return({:error})
+
+        Mockable.do_something()
+
+        assert called Mockable.do_something
+      end
+    end
+  end
 end

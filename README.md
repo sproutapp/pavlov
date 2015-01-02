@@ -280,6 +280,20 @@ it "gets a page" do
 end
 ```
 
+Expectations on mocks also work using `asserts` syntax via the `called` matcher:
+
+```elixir
+before :each do
+  allow HTTPotion |> to_receive :get |> and_return "<html></html>"
+end
+
+it "gets a page" do
+  HTTPotion.get("http://example.com")
+
+  assert called HTTPotion.get
+end
+```
+
 ## Skipping tests
 Pavlov runs with the `--exclude pending:true` configuration by default, which
 means that tests tagged with `:pending` will not be run.
