@@ -1,15 +1,17 @@
 defmodule Pavlov.Syntax.Expect do
   @moduledoc """
   Expect syntax for writing better specs.
-
-  In this example, `eq` is a typical matcher
-  ## Example
-    expect(actual).to eq(expected)
   """
 
   import ExUnit.Assertions
 
-  @doc false
+  @doc """
+  Sets an expectation on a value.
+  In this example, `eq` is a typical matcher:
+  
+  ## Example
+      expect(actual).to eq(expected)
+  """
   def expect(subject) do
     subject
   end
@@ -19,6 +21,7 @@ defmodule Pavlov.Syntax.Expect do
   Enum.each Pavlov.Matchers.__info__(:functions), fn({method, _}) ->
     method_name = :"to_#{method}"
 
+    @doc false
     def unquote(method_name)(expected, actual \\ nil) do
       args = case actual do
         nil -> [expected]
@@ -34,6 +37,7 @@ defmodule Pavlov.Syntax.Expect do
   Enum.each Pavlov.Matchers.__info__(:functions), fn({method, _}) ->
     method_name = :"not_to_#{method}"
 
+    @doc false
     def unquote(method_name)(expected, actual \\ nil) do
       args = case actual do
         nil -> [expected]

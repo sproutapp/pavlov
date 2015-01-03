@@ -1,4 +1,5 @@
 defmodule Pavlov.Utils.Memoize do
+  @moduledoc false
   alias Pavlov.Utils.Memoize.ResultTable
 
   defmacro defmem(header, do: body) do
@@ -19,6 +20,7 @@ defmodule Pavlov.Utils.Memoize do
 
   # gen_server keeping results for function calls
   defmodule ResultTable do
+    @moduledoc false
     use GenServer
 
     def start_link do

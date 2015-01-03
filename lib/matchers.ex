@@ -3,6 +3,10 @@ defmodule Pavlov.Matchers do
   Provides several matcher functions.
   Matchers accept up to two values, `actual` and `expected`,
   and return a Boolean.
+
+  Using "Expects" syntax, all matchers have positive and negative
+  forms. For a matcher `eq`, there is a positive `to_eq` and a negative
+  `not_to_eq` method.
   """
 
   import ExUnit.Assertions, only: [flunk: 1]
@@ -13,8 +17,8 @@ defmodule Pavlov.Matchers do
   Performs an equality test between two values using ==.
 
   Example:
-    eq(1, 2) # => false
-    eq("a", "a") # => true
+      eq(1, 2) # => false
+      eq("a", "a") # => true
   """
   @spec eq(any, any) :: boolean
   def eq(actual, expected) do
@@ -25,8 +29,8 @@ defmodule Pavlov.Matchers do
   Performs an equality test between a given expression and 'true'.
 
   Example:
-    be_true(1==1) # => true
-    be_true("a"=="b") # => false
+      be_true(1==1) # => true
+      be_true("a"=="b") # => false
   """
   @spec be_true(any) :: boolean
   def be_true(exp) do
@@ -37,10 +41,10 @@ defmodule Pavlov.Matchers do
   Performs a truthy check with a given expression.
 
   Example:
-    be_truthy(1) # => true
-    be_truthy("a") # => true
-    be_truthy(nil) # => false
-    be_truthy(false) # => false
+      be_truthy(1) # => true
+      be_truthy("a") # => true
+      be_truthy(nil) # => false
+      be_truthy(false) # => false
   """
   @spec be_truthy(any) :: boolean
   def be_truthy(exp) do
@@ -51,10 +55,10 @@ defmodule Pavlov.Matchers do
   Performs a falsey check with a given expression.
 
   Example:
-  be_falsey(1) # => false
-  be_falsey("a") # => false
-  be_falsey(nil) # => true
-  be_falsey(false) # => true
+      be_falsey(1) # => false
+      be_falsey("a") # => false
+      be_falsey(nil) # => true
+      be_falsey(false) # => true
   """
   @spec be_falsey(any) :: boolean
   def be_falsey(exp) do
@@ -65,8 +69,8 @@ defmodule Pavlov.Matchers do
   Performs a nil check with a given expression.
 
   Example:
-  be_nil(nil) # => true
-  be_nil("a") # => false
+      be_nil(nil) # => true
+      be_nil("a") # => false
   """
   @spec be_nil(any) :: boolean
   def be_nil(exp) do
@@ -77,8 +81,8 @@ defmodule Pavlov.Matchers do
   Performs has_key? operation on a Dict.
 
   Example:
-    have_key(%{:a => 1}, :a) # => true
-    have_key(%{:a => 1}, :b) # => false
+      have_key(%{:a => 1}, :a) # => true
+      have_key(%{:a => 1}, :b) # => false
   """
   @spec have_key(node, t) :: boolean
   def have_key(key, dict) do
@@ -86,11 +90,11 @@ defmodule Pavlov.Matchers do
   end
 
   @doc """
-  Checks if a Dict is empty
+  Checks if a Dict is empty.
 
   Example:
-    be_empty(%{}) # => true
-    be_empty(%{:a => 1}) # => false
+      be_empty(%{}) # => true
+      be_empty(%{:a => 1}) # => false
   """
   @spec be_empty(t|char_list) :: boolean
   def be_empty(list) do
@@ -102,11 +106,11 @@ defmodule Pavlov.Matchers do
   end
 
   @doc """
-  Tests whether a given value is part of an array
+  Tests whether a given value is part of an array.
 
   Example:
-    include([1, 2, 3], 1) # => true
-    include([1], 2) # => false
+      include([1, 2, 3], 1) # => true
+      include([1], 2) # => false
   """
   @spec include(any, list|char_list) :: boolean
   def include(member, list) do
@@ -121,8 +125,8 @@ defmodule Pavlov.Matchers do
   Tests whether a given exception was raised.
 
   Example:
-    have_raised(fn -> 1 + "test") end, ArithmeticError) # => true
-    have_raised(fn -> 1 + 2) end, ArithmeticError) # => false
+      have_raised(fn -> 1 + "test") end, ArithmeticError) # => true
+      have_raised(fn -> 1 + 2) end, ArithmeticError) # => false
   """
   @spec have_raised(any, function) :: boolean
   def have_raised(exception, fun) do
@@ -149,8 +153,8 @@ defmodule Pavlov.Matchers do
   Tests whether a given value was thrown.
 
   Example:
-    have_thrown(fn -> throw "x" end, "x") # => true
-    have_thrown(fn -> throw "x" end, "y") # => false
+      have_thrown(fn -> throw "x" end, "x") # => true
+      have_thrown(fn -> throw "x" end, "y") # => false
   """
   @spec have_thrown(any, function) :: boolean
   def have_thrown(expected, fun) do
@@ -167,8 +171,8 @@ defmodule Pavlov.Matchers do
   Tests whether the process has exited.
 
   Example:
-    have_exited(fn -> exit "x" end) # => true
-    have_thrown(fn -> :ok end) # => false
+      have_exited(fn -> exit "x" end) # => true
+      have_thrown(fn -> :ok end) # => false
   """
   @spec have_exited(function) :: boolean
   def have_exited(fun) do

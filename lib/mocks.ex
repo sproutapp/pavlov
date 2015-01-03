@@ -1,10 +1,14 @@
 defmodule Pavlov.Mocks do
   @moduledoc """
-  Use this module to mock methods on a given module
+  Use this module to mock methods on a given module.
 
   ## Example
     defmodule MySpec do
       use Pavlov.Mocks
+
+      describe "My Tests" do
+        ...
+      end
     end
   """
 
@@ -17,6 +21,13 @@ defmodule Pavlov.Mocks do
     end
   end
 
+  @doc """
+  Prepares a module for stubbing. Used in conjunction with
+  `.to_receive`.
+
+  ## Example
+      allow MyModule |> to_receive(...)
+  """
   def allow(module, opts \\ [:no_link]) do
     :meck.new(module, opts)
 
@@ -28,18 +39,26 @@ defmodule Pavlov.Mocks do
     module
   end
 
+  @doc """
+  Mocks a function on a module. Used in conjunction with
+  `allow`.
+
+  ## Example
+      allow MyModule |> to_receive(get: fn(url) -> "<html></html>" end)
+
+  For a method that takes no arguments and returns nil, you may use a
+  simpler syntax:
+      allow MyModule |> to_receive(:simple_method)
+  """
+  def to_receive(module, mock) when is_list mock do
+    {mock, value} = hd(mock)
+    :meck.expect(module, mock, value)
+    {module, mock, value}
+  end
   def to_receive(module, mock) do
-
-    if is_list mock do
-      {method, value} = hd(mock)
-    else
-      method  = mock
-      value   = fn -> nil end
-    end
-
-    :meck.expect(module, method, value)
-
-    {module, method, value}
+    value = fn -> nil end
+    :meck.expect(module, mock, value)
+    {module, mock, value}
   end
 
 end

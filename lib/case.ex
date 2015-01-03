@@ -3,12 +3,12 @@ defmodule Pavlov.Case do
   Use this module to prepare other modules for testing.
 
   ## Example
-    defmodule MySpec do
-      use Pavlov.Case
-      it "always passes" do
-        assert true
+      defmodule MySpec do
+        use Pavlov.Case
+        it "always passes" do
+          assert true
+        end
       end
-    end
   """
 
   @doc false
@@ -32,9 +32,9 @@ defmodule Pavlov.Case do
   via a string.
 
   ## Example
-    it "is the truth" do
-      assert true == true
-    end
+      it "is the truth" do
+        assert true == true
+      end
   """
   defmacro it(desc, var \\ quote(do: _), contents) do
     quote do
@@ -45,13 +45,13 @@ defmodule Pavlov.Case do
   end
 
   @doc """
-  "xit" allows you specify a pending test, meaning that it is never run.
+  Allows you specify a pending test, meaning that it is never run.
 
   ## Example
-    xit "is the truth" do
-      # This will never run
-      assert true == true
-    end
+      xit "is the truth" do
+        # This will never run
+        assert true == true
+      end
   """
   defmacro xit(description, var \\ quote(do: _), contents) do
     quote do
@@ -107,13 +107,13 @@ defmodule Pavlov.Case do
   is defined.
 
   Example:
-    let :lazy do
-      "oh so lazy"
-    end
+      let :lazy do
+        "oh so lazy"
+      end
 
-    it "lazy initializes" do
-      assert lazy == "oh so lazy"
-    end
+      it "lazy initializes" do
+        assert lazy == "oh so lazy"
+      end
   """
 
   defmacro let(name, contents) do
