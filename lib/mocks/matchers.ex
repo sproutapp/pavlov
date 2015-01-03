@@ -10,6 +10,9 @@ defmodule Pavlov.Mocks.Matchers do
   Use in conjunction with `with` to perform assertions on the arguments
   passed in to the method.
 
+  A negative version `not_to_have_received` is also provided. The same usage
+  instructions apply.
+
   ## Example
       expect HTTPotion |> to_have_received :get
   """
