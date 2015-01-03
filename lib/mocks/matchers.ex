@@ -27,7 +27,7 @@ defmodule Pavlov.Mocks.Matchers do
     end
   end
 
-  defp _called(module, f, args \\ []) do
+  defp _called(module, f, args) do
     :meck.called module, f, args
   end
 

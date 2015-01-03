@@ -5,6 +5,8 @@ defmodule Pavlov.Matchers do
   and return a Boolean.
   """
 
+  import ExUnit.Assertions, only: [flunk: 1]
+
   @type t :: list | map
 
   @doc """
@@ -126,13 +128,20 @@ defmodule Pavlov.Matchers do
   def have_raised(exception, fun) do
     raised = try do
       fun.()
-    rescue
-      e in ArithmeticError -> true
-    end
+    rescue error ->
+      stacktrace = System.stacktrace
+      name = error.__struct__
 
-    case raised do
-      true  -> true
-      _     -> false
+      cond do
+        name == exception ->
+          error
+        name == ExUnit.AssertionError ->
+          reraise(error, stacktrace)
+        true ->
+          flunk "Expected exception #{inspect exception} but got #{inspect name} (#{Exception.message(error)})"
+      end
+    else
+      _ -> false
     end
   end
 
