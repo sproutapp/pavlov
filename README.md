@@ -28,6 +28,24 @@ defmodule OrderSpec do
 end
 ```
 
+## Table Of Contents
+
+- [Describe and Context](#describe-and-context)
+- [Expects syntax](#expects-syntax)
+- [Included Matchers](#included-matchers)
+- [Callbacks](#callbacks)
+  - [before(:each)](#beforeeach)
+  - [before(:all)](#beforeall)
+- [Mocking](#mocking)
+	- [Mocks with arguments](#mocks-with-arguments)
+- [Skipping tests](#skipping-tests)
+	- [xit](#xit)
+	- [xdescribe/xcontext](#xdescribexcontext)
+- [Development](#development)
+	- [Running the tests](#running-the-tests)
+	- [Building the docs](#building-the-docs)
+- [Contributing](#contributing)
+
 ## Describe and Context
 You may use the `describe` and `context` constructs to group tests together in a logical way. Although `context` is just an alias for `describe`, you may use it to add some extra meaning to your tests, ie. you can use `contexts` within a `described` module function to simulate different conditions under which your function should work.
 
