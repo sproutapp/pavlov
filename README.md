@@ -1,12 +1,15 @@
 # Pavlov
 
-A BDD framework for your Elixir projects.
+A BDD framework for your Elixir projects. It's main goal is to provide a rich, expressive syntax for you to develop your unit tests against. Think of it as RSpec's little Elixir-loving brother.
 
-Here's the TL;DR; example:
+Pavlov is an abstraction built on top of the excellent ExUnit, Elixir's standard testing library, so all of its standard features are still supported.
+
+Here's a short and sweet example of Pavlov in action:
 
 ```elixir
 defmodule OrderSpec do
   use Pavlov.Case, async: true
+  import Pavlov.Syntax.Expect
 
   describe ".sum" do
     context "When the Order has items" do
@@ -25,10 +28,10 @@ defmodule OrderSpec do
 end
 ```
 
-## `Describe` and `Context`
+## Describe and Context
 You may use the `describe` and `context` constructs to group tests together in a logical way. Although `context` is just an alias for `describe`, you may use it to add some extra meaning to your tests, ie. you can use `contexts` within a `described` module function to simulate different conditions under which your function should work.
 
-## `Expects` syntax
+## Expects syntax
 
 You may use the regular ExUnit `assert` syntax if you wish, but Pavlov includes
 an `expect` syntax that makes your tests more readable.
@@ -54,204 +57,8 @@ expect 1 |> not_to_eq 2
 expect(1 > 5) |> not_to_be_true
 ```
 
-### `eq`
-In `asserts` syntax:
-```elixir
-#passes if actual == expected
-assert eq(1, 1)
-```
-
-In `expects` syntax:
-```elixir
-#passes if actual == expected
-expect 1 |> to_eq 1
-```
-
-### `be_true`
-In `asserts` syntax:
-```elixir
-#passes if expected == true
-assert be_true(1 > 0)
-```
-
-In `expects` syntax:
-```elixir
-#passes if expected == true
-expect(1 > 0) |> to_be_true
-```
-
-### `be_truthy`
-In `asserts` syntax:
-```elixir
-#passes if expected is truthy
-assert be_truthy("something")
-```
-
-In `expects` syntax:
-```elixir
-#passes if expected is truthy
-expect "something" |> to_be_truthy
-```
-
-### `be_falsey`
-In `asserts` syntax:
-```elixir
-#passes if expected is falsey
-assert be_falsey(false)
-```
-
-In `expects` syntax:
-```elixir
-#passes if expected is falsey
-expect false |> to_be_falsey
-```
-
-### `be_nil`
-In `asserts` syntax:
-```elixir
-#passes if expected is nil
-assert be_nil(nil)
-```
-
-In `expects` syntax:
-```elixir
-#passes if expected is nil
-expect nil |> to_be_nil
-```
-
-### `have_key`
-In `asserts` syntax:
-```elixir
-#passes if Dict has member as a key
-assert have_key(%{:a => 1}, :a)
-```
-
-In `expects` syntax:
-```elixir
-#passes if Dict has member as a key
-expect %{:a => 1} |> to_have_key :a
-```
-
-### `be_empty`
-In `asserts` syntax:
-```elixir
-#passes if Dict is empty
-assert be_empty(%{})
-```
-
-In `expects` syntax:
-```elixir
-#passes if Dict is empty
-expect %{} |> to_be_empty
-```
-
-####It also works with Lists:
-
-In `asserts` syntax:
-```elixir
-#passes if Dict is empty
-assert be_empty([])
-```
-
-In `expects` syntax:
-```elixir
-#passes if Dict is empty
-expect [] |> to_be_empty
-```
-
-####And Strings:
-
-In `asserts` syntax:
-```elixir
-#passes if Dict is empty
-assert be_empty("")
-```
-
-In `expects` syntax:
-```elixir
-#passes if Dict is empty
-expect "" |> to_be_empty
-```
-
-### `include`
-In `asserts` syntax:
-```elixir
-#passes if List includes member
-assert include([1, 2], 1)
-  ```
-
-In `expects` syntax:
-```elixir
-#passes if List includes member
-expect [1, 2] |> to_include 1
-```
-
-####It also works with Maps:
-
-In `asserts` syntax:
-```elixir
-#passes if Map includes member
-assert include(%{:a => 1, :b => 2}, {:a, 1})
-```
-
-In `expects` syntax:
-```elixir
-#passes if Map includes member
-expect %{:a => 1, :b => 2} |> to_include {:a, 1}
-```
-
-####And even Strings:
-
-In `asserts` syntax:
-```elixir
-#passes if String contains partial
-assert include("a string", "a stri")
-```
-
-In `expects` syntax:
-```elixir
-#passes if String contains partial
-expect "a string" |> to_include "a_stri"
-```
-
-### `have_raised`
-In `asserts` syntax:
-```elixir
-#passes if the given function raises an ArithmeticError
-have_raised(fn -> 1 + "test") end, ArithmeticError)
-```
-
-In `expects` syntax:
-```elixir
-#passes if the given function raises an ArithmeticError
-expect fn -> 1 + "test" end |> to_have_raised ArithmeticError
-```
-
-### `have_thrown`
-In `asserts` syntax:
-```elixir
-#passes if the given function throws a given value
-have_thrown(fn -> throw "x" end, "x")
-```
-
-In `expects` syntax:
-```elixir
-#passes if the given function throws a given value
-expect fn -> throw "x" end |> to_have_thrown "x"
-```
-
-### `have_exited`
-In `asserts` syntax:
-```elixir
-#passes if the given function exited the process
-have_thrown(fn -> exit "bye bye!" end)
-```
-
-In `expects` syntax:
-```elixir
-#passes if the given function exited the process
-expect fn -> exit "bye bye!" end |> to_have_exited
-```
+Visit the [Pavlov Wiki](https://github.com/sproutapp/pavlov/wiki/Included-Matchers)
+to learn more about all of the core matchers available for your tests.
 
 ## Callbacks
 For now, Pavlov only supports callbacks that run before test cases. [ExUnit's
@@ -369,7 +176,7 @@ means that tests tagged with `:pending` will not be run.
 
 Pavlov offers several convenience methods to skip your tests, BDD style:
 
-### `xit`
+### xit
 Marks a specific test as pending and will not run it.
 
 ```elixir
@@ -378,7 +185,7 @@ xit "does not run" do
 end
 ```
 
-### `xdescribe/xcontext`
+### xdescribe/xcontext
 Marks a group of tests as pending and will not run them. Just as `describe`
 and `context`, `xdescribe` and `xcontext` are analogous.
 
@@ -393,3 +200,21 @@ xdescribe "A pending group" do
   end
 end
 ```
+
+## Development
+
+After cloning the repo, make sure to download all dependencies using `mix deps.get`
+
+### Running the tests
+Simply run `mix test`
+
+### Building the docs
+Run `MIX_ENV=docs mix docs`. The resulting HTML files will be output to the `docs` folder.
+
+## Contributing
+
+1. Fork it ( https://github.com/sproutapp/pavlov/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
