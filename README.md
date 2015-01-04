@@ -1,4 +1,6 @@
 # Pavlov
+[![Build Status](https://travis-ci.org/sproutapp/pavlov.svg?branch=master)](https://travis-ci.org/sproutapp/pavlov)
+[![Inline docs](http://inch-ci.org/github/sproutapp/pavlov.svg?branch=master&style=flat)](http://inch-ci.org/github/sproutapp/pavlov)
 
 A BDD framework for your Elixir projects. It's main goal is to provide a rich, expressive syntax for you to develop your unit tests against. Think of it as RSpec's little Elixir-loving brother.
 
