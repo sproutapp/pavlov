@@ -32,6 +32,7 @@ end
 
 ## Table Of Contents
 
+- [Usage](#usage)
 - [Describe and Context](#describe-and-context)
 - [Expects syntax](#expects-syntax)
 - [Included Matchers](#included-matchers)
@@ -47,6 +48,24 @@ end
 	- [Running the tests](#running-the-tests)
 	- [Building the docs](#building-the-docs)
 - [Contributing](#contributing)
+
+## Usage
+Add Pavlov as a dependency in your `mix.exs` file:
+
+```elixir
+defp deps do
+  [{:pavlov, ">= 0.1.0", only: :test}]
+end
+```
+
+After you are done, run `mix deps.get` in your shell to fetch the dependencies.
+To start execution of your Pavlov tests, add the following to your 'test/test_helper.exs':
+
+```elixir
+Pavlov.start
+```
+
+Afterwards, running `mix test` in your shell will run all test suites.
 
 ## Describe and Context
 You may use the `describe` and `context` constructs to group tests together in a logical way. Although `context` is just an alias for `describe`, you may use it to add some extra meaning to your tests, ie. you can use `contexts` within a `described` module function to simulate different conditions under which your function should work.
