@@ -242,8 +242,7 @@ end
 
 ## Development
 
-After cloning the repo, make sure to download all dependencies using `mix deps.get`. To run the test suite, type `mix test` in your shell.
-
+After cloning the repo, make sure to download all dependencies using `mix deps.get`.
 Pavlov is tested using Pavlov itself, so the general philosophy is to simply write a test using a given feature until it passes.
 
 ### Running the tests
