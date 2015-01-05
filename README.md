@@ -34,6 +34,7 @@ end
 
 - [Usage](#usage)
 - [Describe and Context](#describe-and-context)
+- [Let](#let)
 - [Expects syntax](#expects-syntax)
 - [Included Matchers](#included-matchers)
 - [Callbacks](#callbacks)
@@ -69,6 +70,18 @@ Afterwards, running `mix test` in your shell will run all test suites.
 
 ## Describe and Context
 You may use the `describe` and `context` constructs to group tests together in a logical way. Although `context` is just an alias for `describe`, you may use it to add some extra meaning to your tests, ie. you can use `contexts` within a `described` module function to simulate different conditions under which your function should work.
+
+## Let
+You can use `let` to define memoized helper methods for your tests. The returning value is cached across all invocations. 'let' is lazily-evaluated, meaning that its body is not evaluated until the first time the method is invoked.
+
+```elixir
+let :order do
+  %Order{items: [
+    {"burger", 10.0}
+    {"fries", 5.2}
+  ]}
+end
+```
 
 ## Expects syntax
 
