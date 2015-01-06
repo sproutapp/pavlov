@@ -10,7 +10,7 @@ defmodule Pavlov.Syntax.Expect do
   In this example, `eq` is a typical matcher:
   
   ## Example
-      expect(actual).to eq(expected)
+      expect(actual) |> to_eq(expected)
   """
   def expect(subject) do
     subject
