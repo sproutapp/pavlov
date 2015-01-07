@@ -142,8 +142,8 @@ In this case, `"A test is about to start"` is printed twice to the console.
 Runs the specified code once before any tests run.
 
 ```elixir
-describe "before :each" do
-  before :each do
+describe "before :all" do
+  before :all do
     IO.puts "This suite is about to run"
     :ok
   end
