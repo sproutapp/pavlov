@@ -12,6 +12,10 @@ defmodule Pavlov.Mocks do
     end
   """
 
+  alias __MODULE__
+
+  defstruct module: nil
+
   import ExUnit.Callbacks
 
   defmacro __using__(_) do
@@ -36,7 +40,7 @@ defmodule Pavlov.Mocks do
       :meck.unload(module)
     end
 
-    module
+    %Mocks{module: module}
   end
 
   @doc """
@@ -50,15 +54,15 @@ defmodule Pavlov.Mocks do
   simpler syntax:
       allow MyModule |> to_receive(:simple_method)
   """
-  def to_receive(module, mock) when is_list mock do
+  def to_receive(struct = %Mocks{module: module}, mock) when is_list mock do
     {mock, value} = hd(mock)
     :meck.expect(module, mock, value)
-    {module, mock, value}
+    struct
   end
-  def to_receive(module, mock) do
+  def to_receive(struct = %Mocks{module: module}, mock) do
     value = fn -> nil end
     :meck.expect(module, mock, value)
-    {module, mock, value}
+    struct
   end
 
 end
