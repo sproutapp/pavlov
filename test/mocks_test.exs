@@ -28,6 +28,21 @@ defmodule PavlovMocksTest do
     it "resets mocks" do
       expect Mockable.do_something |> to_eq({:ok, "did something"})
     end
+
+    it "permits chaining to_receive" do
+      allow(Mockable)
+        |> to_receive(do_something: fn -> :error end)
+        |> to_receive(do_something_else: fn -> :success end)
+
+      result = Mockable.do_something()
+      other_result = Mockable.do_something_else()
+
+      expect Mockable |> to_have_received :do_something
+      expect result |> to_eq(:error)
+
+      expect Mockable |> to_have_received :do_something_else
+      expect other_result |> to_eq(:success)
+    end
   end
 
   context "Stubbing" do
