@@ -178,6 +178,19 @@ it "gets a page" do
 end
 ```
 
+If you want the mock to retain all other functions in the original module,
+then you will need to pass the `opts` `List argument to the `allow` function
+and include the `:passthrough` value. The `allow` function specifies a default
+`opts` `List` that includes the `:no_link` value. This value should be included
+in the `List` as it ensures that the mock (which is linked to the creating
+process) will unload automatically when a crash occurs.
+
+```elixir
+before :each do
+  allow(HTTPotion, [:no_link, :passthrough]) |> to_receive(get: fn(url) -> "<html></html>" end)
+end
+```
+
 Expectations on mocks also work using `asserts` syntax via the `called` matcher:
 
 ```elixir
