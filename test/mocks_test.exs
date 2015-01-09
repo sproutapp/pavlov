@@ -43,6 +43,22 @@ defmodule PavlovMocksTest do
       expect Mockable |> to_have_received :do_something_else
       expect other_result |> to_eq(:success)
     end
+
+    it "doesn't permit the mock to retain other functions in module" do
+      allow(Mockable)
+        |> to_receive(do_something: fn -> :success end)
+
+        expect fn -> Mockable.do_something_else end |> to_have_raised UndefinedFunctionError
+    end
+
+    context "when the :passthrough option is used" do
+      it "permits the mock to retain other functions in the module" do
+        allow(Mockable, [:no_link, :passthrough])
+          |> to_receive(do_something: fn -> :success end)
+
+          expect fn -> Mockable.do_something_else end |> not_to_have_raised UndefinedFunctionError
+      end
+    end
   end
 
   context "Stubbing" do
