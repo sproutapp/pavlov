@@ -179,7 +179,7 @@ end
 ```
 
 If you want the mock to retain all other functions in the original module,
-then you will need to pass the `opts` `List argument to the `allow` function
+then you will need to pass the `opts` `List` argument to the `allow` function
 and include the `:passthrough` value. The `allow` function specifies a default
 `opts` `List` that includes the `:no_link` value. This value should be included
 in the `List` as it ensures that the mock (which is linked to the creating
