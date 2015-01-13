@@ -1,5 +1,7 @@
 defmodule Pavlov.Matchers.Messages do
+  @moduledoc false
 
+  @doc false
   def message_for_matcher(matcher_name, [actual, expected], :assertion) do
     actual = inspect actual
     expected = inspect expected
