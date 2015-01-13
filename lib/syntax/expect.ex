@@ -4,11 +4,12 @@ defmodule Pavlov.Syntax.Expect do
   """
 
   import ExUnit.Assertions
+  import Pavlov.Matchers.Messages
 
   @doc """
   Sets an expectation on a value.
   In this example, `eq` is a typical matcher:
-  
+
   ## Example
       expect(actual) |> to_eq(expected)
   """
@@ -28,7 +29,12 @@ defmodule Pavlov.Syntax.Expect do
         _ -> [actual, expected]
       end
 
-      assert apply(Pavlov.Matchers, unquote(method), args)
+      result = apply(Pavlov.Matchers, unquote(method), args)
+
+      case result do
+        false -> flunk message_for_matcher(unquote(:"#{method}"), args, :assertion)
+        _ -> assert result
+      end
     end
   end
 
@@ -44,7 +50,12 @@ defmodule Pavlov.Syntax.Expect do
         _ -> [actual, expected]
       end
 
-      refute apply(Pavlov.Matchers, unquote(method), args)
+      result = apply(Pavlov.Matchers, unquote(method), args)
+
+      case result do
+        true -> flunk message_for_matcher(unquote(:"#{method}"), args, :refutation)
+        _ -> refute result
+      end
     end
   end
 end
