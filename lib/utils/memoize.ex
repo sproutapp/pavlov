@@ -18,6 +18,10 @@ defmodule Pavlov.Utils.Memoize do
     end
   end
 
+  def flush do
+    ResultTable.flush
+  end
+
   # gen_server keeping results for function calls
   defmodule ResultTable do
     @moduledoc false
@@ -34,6 +38,9 @@ defmodule Pavlov.Utils.Memoize do
         { :reply, :miss, dict }
       end
     end
+    def handle_call({ :flush }, _sender, dict) do
+      { :reply, :hit, Dict.drop(dict, Dict.keys(dict)) }
+    end
 
     def handle_cast({ :put, fun, args, result }, dict) do
       { :noreply, Dict.put(dict, { fun, args }, result) }
@@ -41,5 +48,6 @@ defmodule Pavlov.Utils.Memoize do
 
     def get(fun, args),         do: GenServer.call(:result_table, { :get, fun, args })
     def put(fun, args, result), do: GenServer.cast(:result_table, { :put, fun, args, result })
+    def flush, do: GenServer.call(:result_table, { :flush })
   end
 end
