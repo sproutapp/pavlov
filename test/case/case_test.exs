@@ -69,6 +69,7 @@ defmodule PavlovCaseTest do
     end
 
     it "only invokes the letted block once" do
+      Agent.update(:memoized_let, fn acc -> 0 end)
       something
       something
 

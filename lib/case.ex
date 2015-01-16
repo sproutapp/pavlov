@@ -147,6 +147,7 @@ defmodule Pavlov.Case do
       Pavlov.Case.__on_definition__(__ENV__, message, pending)
 
       def unquote(message)(unquote(var)) do
+        Pavlov.Utils.Memoize.flush
         unquote(contents)
       end
     end
