@@ -15,6 +15,13 @@ defmodule PavlovMocksTest do
         expect Mockable |> to_have_received :do_something
         expect result |> to_eq(:error)
       end
+
+      it "provides a flunk message" do
+        message = message_for_matcher(:have_received, [Mockable, :do_something], :assertion)
+
+        expect message
+          |> to_eq "Expected Elixir.Fixtures.Mockable to have received :do_something"
+      end
     end
 
     describe ".not_to_have_received" do
@@ -22,6 +29,22 @@ defmodule PavlovMocksTest do
         allow(Mockable) |> to_receive(do_something: fn -> :error end)
 
         expect Mockable |> not_to_have_received :do_something
+      end
+
+      it "provides a flunk message" do
+        message = message_for_matcher(:have_received, [Mockable, :do_something], :refutation)
+
+        expect message
+          |> to_eq "Expected Elixir.Fixtures.Mockable not to have received :do_something"
+      end
+
+      context "when used with argument expectations" do
+        it "provides a flunk message" do
+          message = message_for_matcher(:have_received, [Mockable, :do_something, [1]], :refutation)
+
+          expect message
+            |> to_eq "Expected Elixir.Fixtures.Mockable not to have received :do_something with [1]"
+        end
       end
     end
 
@@ -86,6 +109,13 @@ defmodule PavlovMocksTest do
 
       expect Mockable |> to_have_received :do_with_args |> with "a string"
       expect result |> to_eq :error
+    end
+
+    it "provides a flunk message" do
+      message = message_for_matcher(:have_received, [Mockable, :do_with_args, [1]], :assertion)
+
+      expect message
+        |> to_eq "Expected Elixir.Fixtures.Mockable to have received :do_with_args with [1]"
     end
   end
 

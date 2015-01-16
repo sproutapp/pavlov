@@ -4,6 +4,7 @@ defmodule Pavlov.Mocks.Matchers do
   """
 
   import ExUnit.Assertions
+  import Pavlov.Mocks.Matchers.Messages
 
   @doc """
   Asserts whether a method was called with on a mocked module.
@@ -18,19 +19,41 @@ defmodule Pavlov.Mocks.Matchers do
   """
   def to_have_received(module, tuple) when is_tuple(tuple) do
     {method, args} = tuple
-    assert _called(module, method, List.flatten [args])
+    args = List.flatten [args]
+    result = _called(module, method, args)
+
+    case result do
+      false -> flunk message_for_matcher(:have_received, [module, method, args], :assertion)
+      _ -> assert result
+    end
   end
   def to_have_received(module, method) do
-    assert _called(module, method, [])
+    result = _called(module, method, [])
+
+    case result do
+      false -> flunk message_for_matcher(:have_received, [module, method], :assertion)
+      _ -> assert result
+    end
   end
 
   @doc false
   def not_to_have_received(module, tuple) when is_tuple(tuple) do
     {method, args} = tuple
-    refute _called(module, method, List.flatten [args])
+    args = List.flatten [args]
+    result = _called(module, method, args)
+
+    case result do
+      true -> flunk message_for_matcher(:have_received, [module, method, args], :refutation)
+      _ -> refute result
+    end
   end
   def not_to_have_received(module, method) do
-    refute _called(module, method, [])
+    result = _called(module, method, [])
+
+    case result do
+      true -> flunk message_for_matcher(:have_received, [module, method], :refutation)
+      _ -> refute result
+    end
   end
 
   @doc """

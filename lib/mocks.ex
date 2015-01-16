@@ -22,6 +22,7 @@ defmodule Pavlov.Mocks do
     quote do
       import Pavlov.Mocks
       import Pavlov.Mocks.Matchers
+      import Pavlov.Mocks.Matchers.Messages
     end
   end
 
