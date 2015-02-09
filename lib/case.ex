@@ -21,6 +21,8 @@ defmodule Pavlov.Case do
       @stack []
       @pending false
 
+      Agent.start(fn -> %{} end, name: :pavlov_let_defs)
+
       import Pavlov.Case
       import Pavlov.Callbacks
       import Pavlov.Syntax.Sugar
@@ -75,10 +77,22 @@ defmodule Pavlov.Case do
       # Defines a new module per describe, thus scoping .let
       defmodule Module.concat(__MODULE__, unquote(desc)) do
         use ExUnit.Case
+
         @stack old_stack
         @pending pending
 
         unquote(contents)
+
+        # Redefine enclosing let definitions in this module
+        Agent.get(:pavlov_let_defs, fn dict ->
+          Stream.filter dict, fn {module, _name} ->
+            String.starts_with? "#{__MODULE__}", "#{module}"
+          end
+        end)
+          |> Stream.map(fn {_module, {name, fun}} ->
+            quote do: let(unquote(name), do: unquote(fun))
+          end)
+          |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
       end
 
       # Cleans context stack
@@ -120,6 +134,10 @@ defmodule Pavlov.Case do
     quote do
       require Pavlov.Utils.Memoize, as: Memoize
       Memoize.defmem unquote(name)(), do: unquote(contents[:do])
+
+      Agent.update(:pavlov_let_defs, fn(map) ->
+        Dict.put_new map, __MODULE__, {unquote(Macro.escape name), unquote(Macro.escape contents[:do])}
+      end)
     end
   end
 
