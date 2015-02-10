@@ -19,6 +19,15 @@ defmodule Pavlov.Callbacks do
   import ExUnit.Callbacks
 
   @doc false
+  defmacro __using__(opts \\ []) do
+    quote do
+      Agent.start(fn -> %{} end, name: :pavlov_callback_defs)
+
+      import Pavlov.Callbacks
+    end
+  end
+
+  @doc false
   defmacro before(periodicity \\ :each, context \\ quote(do: _), contents)
 
   @doc """
@@ -39,11 +48,19 @@ defmodule Pavlov.Callbacks do
   defmacro before(:each, context, contents) do
     quote do
       setup unquote(context), do: unquote(contents)[:do]
+
+      Agent.update :pavlov_callback_defs, fn(map) ->
+        Dict.put_new map, __MODULE__, {:each, unquote(Macro.escape context), unquote(Macro.escape contents[:do])}
+      end
     end
   end
   defmacro before(:all, context, contents) do
     quote do
       setup_all unquote(context), do: unquote(contents)[:do]
+
+      Agent.update :pavlov_callback_defs, fn(map) ->
+        Dict.put_new map, __MODULE__, {:all, unquote(Macro.escape context), unquote(Macro.escape contents[:do])}
+      end
     end
   end
 

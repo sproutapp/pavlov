@@ -17,6 +17,8 @@ defmodule Pavlov.Case do
 
     quote do
       use ExUnit.Case, async: unquote(async)
+      use Pavlov.Callbacks
+      use Pavlov.Mocks
 
       @stack []
       @pending false
@@ -24,7 +26,6 @@ defmodule Pavlov.Case do
       Agent.start(fn -> %{} end, name: :pavlov_let_defs)
 
       import Pavlov.Case
-      import Pavlov.Callbacks
       import Pavlov.Syntax.Sugar
     end
   end
@@ -91,6 +92,20 @@ defmodule Pavlov.Case do
         end)
           |> Stream.map(fn {_module, {name, fun}} ->
             quote do: let(unquote(name), do: unquote(fun))
+          end)
+          |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
+
+        # Redefine enclosing let definitions in this module
+        Agent.get(:pavlov_callback_defs, fn dict ->
+          Stream.filter dict, fn {module, _name} ->
+            String.starts_with?("#{__MODULE__}", "#{module}") && "#{__MODULE__}" != "#{module}"
+          end
+        end)
+          |> Stream.map(fn {_module, {periodicity, context, fun}} ->
+            quote do
+              use Pavlov.Mocks
+              before(unquote(periodicity), unquote(context), do: unquote(fun))
+            end
           end)
           |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
       end
