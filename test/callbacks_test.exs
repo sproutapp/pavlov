@@ -17,6 +17,13 @@ defmodule PavlovCallbackTest do
         expect context |> to_have_key :hello
         expect context[:hello] |> to_eq "world"
       end
+
+      context "With a Nested context" do
+        it "runs the callback before the test", context do
+          expect context |> to_have_key :hello
+          expect context[:hello] |> to_eq "world"
+        end
+      end
     end
 
     describe "before :all" do
@@ -28,6 +35,11 @@ defmodule PavlovCallbackTest do
         expect context[:context] |> to_eq :setup_all
       end
 
+      context "With a Nested context" do
+        it "runs the callback before the test", context do
+          expect context[:context] |> to_eq :setup_all
+        end
+      end
     end
   end
 end

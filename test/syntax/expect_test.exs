@@ -14,14 +14,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:eq, [2, 1], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:eq, [2, 1], :assertion)
 
         expect message
           |> to_eq "Expected 2 to equal 1"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:eq, [2, 2], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:eq, [2, 2], :refutation)
 
         expect message
           |> to_eq "Expected 2 not to equal 2"
@@ -38,14 +38,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:be_true, [false], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_true, [false], :assertion)
 
         expect message
           |> to_eq "Expected false to be true"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:be_true, [true], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_true, [true], :refutation)
 
         expect message
           |> to_eq "Expected true not to be true"
@@ -65,14 +65,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:be_truthy, [nil], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_truthy, [nil], :assertion)
 
         expect message
           |> to_eq "Expected nil to be truthy"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:be_truthy, [nil], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_truthy, [nil], :refutation)
 
         expect message
           |> to_eq "Expected nil not to be truthy"
@@ -92,14 +92,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:be_falsey, [false], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_falsey, [false], :assertion)
 
         expect message
           |> to_eq "Expected false to be falsey"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:be_falsey, [false], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_falsey, [false], :refutation)
 
         expect message
           |> to_eq "Expected false not to be falsey"
@@ -116,14 +116,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:be_nil, [nil], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_nil, [nil], :assertion)
 
         expect message
           |> to_eq "Expected nil to be nil"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:be_nil, [nil], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_nil, [nil], :refutation)
 
         expect message
           |> to_eq "Expected nil not to be nil"
@@ -142,14 +142,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:have_key, [%{:a => 1}, :b], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_key, [%{:a => 1}, :b], :assertion)
 
         expect message
           |> to_eq "Expected %{a: 1} to have key :b"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:have_key, [%{:a => 1}, :b], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_key, [%{:a => 1}, :b], :refutation)
 
         expect message
           |> to_eq "Expected %{a: 1} not to have key :b"
@@ -173,14 +173,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:be_empty, [%{:a => 1}], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_empty, [%{:a => 1}], :assertion)
 
         expect message
           |> to_eq "Expected %{a: 1} to be empty"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:be_empty, [%{:a => 1}], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:be_empty, [%{:a => 1}], :refutation)
 
         expect message
           |> to_eq "Expected %{a: 1} not to be empty"
@@ -207,14 +207,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:include, [%{:a => 1}, %{:a => 5}], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:include, [%{:a => 1}, %{:a => 5}], :assertion)
 
         expect message
           |> to_eq "Expected %{a: 1} to include %{a: 5}"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:include, [%{:a => 1}, %{:a => 5}], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:include, [%{:a => 1}, %{:a => 5}], :refutation)
 
         expect message
           |> to_eq "Expected %{a: 1} not to include %{a: 5}"
@@ -231,14 +231,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:have_raised, [fn -> 1 + "test" end, ArithmeticError], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_raised, [fn -> 1 + "test" end, ArithmeticError], :assertion)
 
         expect message
           |> to_eq "Expected function to have raised ArithmeticError"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:have_raised, [fn -> 1 + "test" end, ArithmeticError], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_raised, [fn -> 1 + "test" end, ArithmeticError], :refutation)
 
         expect message
           |> to_eq "Expected function not to have raised ArithmeticError"
@@ -255,14 +255,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:have_thrown, [fn -> 1 + throw("x") end, "x"], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_thrown, [fn -> 1 + throw("x") end, "x"], :assertion)
 
         expect message
           |> to_eq "Expected function to have thrown \"x\""
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:have_thrown, [fn -> 1 + throw("x") end, "x"], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_thrown, [fn -> 1 + throw("x") end, "x"], :refutation)
 
         expect message
           |> to_eq "Expected function not to have thrown \"x\""
@@ -279,14 +279,14 @@ defmodule PavlovExpectTest do
       end
 
       it "provides a flunk message" do
-        message = message_for_matcher(:have_exited, [fn -> exit "bye!" end], :assertion)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_exited, [fn -> exit "bye!" end], :assertion)
 
         expect message
           |> to_eq "Expected function to have exited"
       end
 
       it "provides a refutation flunk message" do
-        message = message_for_matcher(:have_exited, [fn -> exit "bye!" end], :refutation)
+        message = Pavlov.Matchers.Messages.message_for_matcher(:have_exited, [fn -> exit "bye!" end], :refutation)
 
         expect message
           |> to_eq "Expected function not to have exited"
