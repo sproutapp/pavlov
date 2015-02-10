@@ -9,7 +9,7 @@ defmodule Pavlov.Mixfile do
      elixir: "~> 1.0",
      deps: deps,
      elixirc_paths: paths(Mix.env),
-     registered: [:pavlov_let_defs],
+     registered: [:pavlov_let_defs, :pavlov_callback_defs],
 
      # Hex
      description: description,
