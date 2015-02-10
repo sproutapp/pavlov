@@ -77,9 +77,29 @@ defmodule PavlovCaseTest do
     end
 
     context "Scoping" do
-      it "does not leak letted functions through contexts" do
+      let :outer_something do
+        "I come from an enclosing context"
+      end
+
+      context "Inner .let" do
+        let :inner_something do
+          "I come from a deeper context"
+        end
+
+        it "allows accessing letted functions from enclosing contexts" do
+          assert outer_something == "I come from an enclosing context"
+        end
+
+        context "An even deeper context" do
+          it "allows accessing letted functions from depply enclosing contexts" do
+            assert outer_something == "I come from an enclosing context"
+          end
+        end
+      end
+
+      it "does not leak letted functions from deeper contexts" do
         fns = __MODULE__.__info__(:functions)
-        assert fns[:something] == nil
+        assert fns[:inner_something] == nil
       end
     end
   end
