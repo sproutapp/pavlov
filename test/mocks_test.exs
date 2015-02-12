@@ -138,6 +138,20 @@ defmodule PavlovMocksTest do
         expect Fixtures.Mockable |> to_have_received :do_something
         expect result |> to_eq(:error)
       end
+
+      context "When an existing mock is re-mocked" do
+        before :each do
+          allow(Fixtures.Mockable) |> to_receive(do_something: fn -> :ok end)
+          :ok
+        end
+
+        it "uses the re-mock" do
+          result = Fixtures.Mockable.do_something()
+
+          expect Fixtures.Mockable |> to_have_received :do_something
+          expect result |> to_eq(:ok)
+        end
+      end
     end
   end
 
