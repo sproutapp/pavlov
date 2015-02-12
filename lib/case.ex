@@ -82,19 +82,6 @@ defmodule Pavlov.Case do
         @stack old_stack
         @pending pending
 
-        unquote(contents)
-
-        # Redefine enclosing let definitions in this module
-        Agent.get(:pavlov_let_defs, fn dict ->
-          Stream.filter dict, fn {module, _name} ->
-            String.starts_with? "#{__MODULE__}", "#{module}"
-          end
-        end)
-          |> Stream.map(fn {_module, {name, fun}} ->
-            quote do: let(unquote(name), do: unquote(fun))
-          end)
-          |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
-
         # Redefine enclosing let definitions in this module
         Agent.get(:pavlov_callback_defs, fn dict ->
           Stream.filter dict, fn {module, _name} ->
@@ -106,6 +93,19 @@ defmodule Pavlov.Case do
               use Pavlov.Mocks
               before(unquote(periodicity), unquote(context), do: unquote(fun))
             end
+          end)
+          |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
+
+        unquote(contents)
+
+        # Redefine enclosing let definitions in this module
+        Agent.get(:pavlov_let_defs, fn dict ->
+          Stream.filter dict, fn {module, _name} ->
+            String.starts_with? "#{__MODULE__}", "#{module}"
+          end
+        end)
+          |> Stream.map(fn {_module, {name, fun}} ->
+            quote do: let(unquote(name), do: unquote(fun))
           end)
           |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
       end

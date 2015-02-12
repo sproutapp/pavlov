@@ -34,11 +34,13 @@ defmodule Pavlov.Mocks do
       allow MyModule |> to_receive(...)
   """
   def allow(module, opts \\ [:no_link]) do
+    try_unloading module
+
     :meck.new(module, opts)
 
     # Unload the module once the test exits
     on_exit fn ->
-      :meck.unload(module)
+      try_unloading module
     end
 
     %Mocks{module: module}
@@ -64,6 +66,15 @@ defmodule Pavlov.Mocks do
     value = fn -> nil end
     :meck.expect(module, mock, value)
     struct
+  end
+
+  @doc false
+  defp try_unloading(module) do
+    try do
+      :meck.unload module
+    rescue
+      _ -> :ok
+    end
   end
 
 end
