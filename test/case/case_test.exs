@@ -81,6 +81,10 @@ defmodule PavlovCaseTest do
         "I come from an enclosing context"
       end
 
+      let :outer_something_else do
+        "I also come from an enclosing context"
+      end
+
       context "Inner .let" do
         let :inner_something do
           "I come from a deeper context"
@@ -88,6 +92,7 @@ defmodule PavlovCaseTest do
 
         it "allows accessing letted functions from enclosing contexts" do
           assert outer_something == "I come from an enclosing context"
+          assert outer_something_else == "I also come from an enclosing context"
         end
 
         context "An even deeper context" do

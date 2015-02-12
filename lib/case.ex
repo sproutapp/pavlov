@@ -100,12 +100,14 @@ defmodule Pavlov.Case do
 
         # Redefine enclosing let definitions in this module
         Agent.get(:pavlov_let_defs, fn dict ->
-          Stream.filter dict, fn {module, _name} ->
+          Stream.filter dict, fn {module, lets} ->
             String.starts_with? "#{__MODULE__}", "#{module}"
           end
         end)
-          |> Stream.map(fn {_module, {name, fun}} ->
-            quote do: let(unquote(name), do: unquote(fun))
+          |> Stream.flat_map(fn {_module, lets} ->
+            Stream.map lets, fn ({name, fun}) ->
+              quote do: let(unquote(name), do: unquote(fun))
+            end
           end)
           |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
       end
@@ -151,7 +153,9 @@ defmodule Pavlov.Case do
       Memoize.defmem unquote(name)(), do: unquote(contents[:do])
 
       Agent.update(:pavlov_let_defs, fn(map) ->
-        Dict.put_new map, __MODULE__, {unquote(Macro.escape name), unquote(Macro.escape contents[:do])}
+        new_let = {unquote(Macro.escape name), unquote(Macro.escape contents[:do])}
+        
+        Dict.put map, __MODULE__, (map[__MODULE__] || []) ++ [new_let]
       end)
     end
   end
