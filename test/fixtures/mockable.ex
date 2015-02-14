@@ -13,4 +13,9 @@ defmodule Fixtures.Mockable do
   def do_with_args(arg) do
     arg
   end
+
+  @doc false
+  def do_with_several_args(arg1, arg2) do
+    [arg1, arg2]
+  end
 end

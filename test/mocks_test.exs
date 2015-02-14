@@ -101,6 +101,14 @@ defmodule PavlovMocksTest do
       expect Fixtures.Mockable |> to_have_received :do_with_args |> with "a string"
     end
 
+    it "allows setting expectations matching method and several arguments" do
+      allow(Fixtures.Mockable) |> to_receive(do_with_several_args: fn(_, _) -> :ok end )
+
+      Fixtures.Mockable.do_with_several_args(1, 2)
+
+      expect Fixtures.Mockable |> to_have_received :do_with_several_args |> with [:_, 2]
+    end
+
     it "allows mocking with arguments to return something" do
       allow(Fixtures.Mockable) |> to_receive(do_with_args: fn(_) -> :error end )
 
