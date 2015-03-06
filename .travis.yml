@@ -4,3 +4,4 @@ otp_release:
 after_script:
   - MIX_ENV=docs mix deps.get
   - MIX_ENV=docs mix inch.report
+sudo: false # aka: use container for testing
