@@ -83,6 +83,27 @@ let :order do
 end
 ```
 
+## Subject
+You can use `subject` to explicitly define the value that is returned by the subject method in the example scope. A subject declared in a context will be available in child contexts as well.
+
+```elixir
+describe "Array" do
+  subject do
+    [1, 2, 3]
+  end
+
+  it "has the prescribed elements" do
+    assert subject == [1, 2, 3]
+  end
+
+  context "Inner context" do
+    it "can use an outer-scope subject" do
+      assert subject == [1, 2, 3]
+    end
+  end
+end
+```
+
 ## Expects syntax
 
 You may use the regular ExUnit `assert` syntax if you wish, but Pavlov includes
