@@ -152,9 +152,11 @@ defmodule Pavlov.Case do
       require Pavlov.Utils.Memoize, as: Memoize
       Memoize.defmem unquote(name)(), do: unquote(contents[:do])
 
+      defoverridable [{unquote(name), 0}]
+
       Agent.update(:pavlov_let_defs, fn(map) ->
         new_let = {unquote(Macro.escape name), unquote(Macro.escape contents[:do])}
-        
+
         Dict.put map, __MODULE__, (map[__MODULE__] || []) ++ [new_let]
       end)
     end
