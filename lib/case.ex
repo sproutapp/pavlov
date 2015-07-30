@@ -194,8 +194,8 @@ defmodule Pavlov.Case do
   def __on_definition__(env, name, pending \\ false) do
     mod   = env.module
     tags  = Module.get_attribute(mod, :tag) ++ Module.get_attribute(mod, :moduletag)
-    if pending do tags = [tags|[:pending]] end
-    tags  = tags |> normalize_tags |> Map.merge(%{line: env.line, file: env.file})
+    if pending do tags = tags ++ [:pending] end
+    tags = tags |> normalize_tags |> Map.merge(%{line: env.line, file: env.file})
 
     Module.put_attribute(mod, :ex_unit_tests,
     %ExUnit.Test{name: name, case: mod, tags: tags})
@@ -205,8 +205,8 @@ defmodule Pavlov.Case do
 
   defp normalize_tags(tags) do
     Enum.reduce Enum.reverse(tags), %{}, fn
-    tag, acc when is_atom(tag) -> Map.put(acc, tag, true)
-    tag, acc when is_list(tag) -> Dict.merge(acc, tag)
+      tag, acc when is_atom(tag) -> Map.put(acc, tag, true)
+      tag, acc when is_list(tag) -> Dict.merge(acc, tag)
     end
   end
 end
