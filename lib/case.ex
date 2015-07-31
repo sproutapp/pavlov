@@ -176,6 +176,30 @@ defmodule Pavlov.Case do
     end
   end
 
+  @doc """
+  You can use `subject` to explicitly define the value
+  that is returned by the subject method in the example
+  scope. A subject declared in a context will be available
+  in child contexts as well.
+
+  Example:
+      describe "Array" do
+        subject do
+          [1, 2, 3]
+        end
+
+        it "has the prescribed elements" do
+          assert subject == [1, 2, 3]
+        end
+
+        context "Inner context" do
+          it "can use an outer-scope subject" do
+            assert subject == [1, 2, 3]
+          end
+        end
+      end
+  """
+
   defmacro subject(contents) do
     contents = Macro.escape(contents)
 

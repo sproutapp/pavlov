@@ -35,6 +35,7 @@ end
 - [Usage](#usage)
 - [Describe and Context](#describe-and-context)
 - [Let](#let)
+- [Subject](#subject)
 - [Expects syntax](#expects-syntax)
 - [Included Matchers](#included-matchers)
 - [Callbacks](#callbacks)
