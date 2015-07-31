@@ -118,15 +118,16 @@ defmodule PavlovCaseTest do
   end
 
   describe ".subject" do
-    subject do: 5
+    subject do: response
+    let :response, do: 5
 
     it "allows the usage of a subject method" do
-      assert subject == 5
+      assert subject == response
     end
 
     context "Inner .subject" do
       it "uses the outer scope's subject method" do
-        assert subject == 5
+        assert subject == response
       end
     end
   end

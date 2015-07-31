@@ -177,13 +177,17 @@ defmodule Pavlov.Case do
   end
 
   defmacro subject(contents) do
-    quote do
-      def subject, do: unquote(contents)[:do]
+    contents = Macro.escape(contents)
+
+    quote bind_quoted: binding do
+      def subject do
+        Macro.expand(unquote(contents), __MODULE__)[:do]
+      end
 
       defoverridable [subject: 0]
 
       Agent.update(:pavlov_subject_defs, fn(map) ->
-        Dict.put map, __MODULE__, (map[__MODULE__] || []) ++ [unquote(contents)]
+        Dict.put map, __MODULE__, (map[__MODULE__] || []) ++ [contents]
       end)
     end
   end
