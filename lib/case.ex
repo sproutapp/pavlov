@@ -40,9 +40,16 @@ defmodule Pavlov.Case do
         assert true == true
       end
   """
+  defmacro it(contents) do
+    quote do
+      it "is expected", do: unquote(contents)
+    end
+  end
   defmacro it(desc, var \\ quote(do: _), contents) do
     quote do
-      defit Enum.join(@stack, "") <> unquote(desc), unquote(var), @pending do
+      message = Enum.join(@stack, "") <> unquote(desc)
+
+      defit message, unquote(var), @pending do
         unquote(contents)
       end
     end
@@ -82,6 +89,9 @@ defmodule Pavlov.Case do
 
         @stack old_stack
         @pending pending
+
+        def subject, do: nil
+        defoverridable [subject: 0]
 
         # Redefine enclosing let definitions in this module
         Agent.get(:pavlov_callback_defs, fn dict ->

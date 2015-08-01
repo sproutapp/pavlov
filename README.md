@@ -105,6 +105,26 @@ describe "Array" do
 end
 ```
 
+If you are using [Expects syntax](#expects-syntax) together with `subject`, you can use the `is_expected` helper:
+
+```elixir
+describe "Numbers" do
+  subject do: 5
+
+  context "straight up, no message" do
+    it is_expected |> to_eq 5
+  end
+
+  context "you can also use a custom message" do
+    it "is equal to 5" do
+      is_expected |> to_eq 5
+    end
+  end
+end
+```
+
+By default, every created context via `describe` or `context` contains a `subject` that returns `nil`.
+
 ## Expects syntax
 
 You may use the regular ExUnit `assert` syntax if you wish, but Pavlov includes

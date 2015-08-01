@@ -25,4 +25,9 @@ defmodule Pavlov.Syntax.Sugar do
     end
   end
 
+  defmacro is_expected do
+    quote do
+      subject
+    end
+  end
 end

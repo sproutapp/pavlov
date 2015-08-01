@@ -13,6 +13,13 @@ defmodule Pavlov.Syntax.Expect do
   ## Example
       expect(actual) |> to_eq(expected)
   """
+  def expect({fun, context, args}, module) do
+    contents = {fun, context, args}
+
+    quote do
+      Module.eval_quoted(unquote(module), unquote(contents))
+    end
+  end
   def expect(subject) do
     subject
   end
