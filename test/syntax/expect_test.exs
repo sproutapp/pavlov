@@ -3,6 +3,20 @@ defmodule PavlovExpectTest do
   import Pavlov.Syntax.Expect
   import Pavlov.Matchers.Messages
 
+  describe ".is_expected" do
+    subject do: 5
+
+    context "without a message" do
+      it is_expected |> to_eq 5
+    end
+
+    context "with a message" do
+      it "is equal to 5" do
+        is_expected |> to_eq 5
+      end
+    end
+  end
+
   describe "Matchers" do
     describe ".eq" do
       it "compares based on equality" do
