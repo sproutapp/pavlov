@@ -86,7 +86,7 @@ defmodule Pavlov.Case do
         # Redefine enclosing let definitions in this module
         Agent.get(:pavlov_callback_defs, fn dict ->
           Stream.filter dict, fn {module, _name} ->
-            String.starts_with?("#{__MODULE__}", "#{module}") && "#{__MODULE__}" != "#{module}"
+            sub_module? module, __MODULE__
           end
         end)
           |> Stream.map(fn {_module, {periodicity, context, fun}} ->
@@ -102,7 +102,7 @@ defmodule Pavlov.Case do
         # Redefine enclosing let definitions in this module
         Agent.get(:pavlov_let_defs, fn dict ->
           Stream.filter dict, fn {module, lets} ->
-            String.starts_with? "#{__MODULE__}", "#{module}"
+            sub_module? module, __MODULE__
           end
         end)
           |> Stream.flat_map(fn {_module, lets} ->
@@ -114,8 +114,8 @@ defmodule Pavlov.Case do
 
         # Redefine enclosing subject definitions in this module
         Agent.get(:pavlov_subject_defs, fn dict ->
-          Stream.filter dict, fn {module, subjects} ->
-            String.starts_with? "#{__MODULE__}", "#{module}"
+          Stream.filter dict, fn {module, _subjects} ->
+            sub_module? module, __MODULE__
           end
         end)
           |> Stream.flat_map(fn {_module, subjects} ->
@@ -257,6 +257,11 @@ defmodule Pavlov.Case do
     %ExUnit.Test{name: name, case: mod, tags: tags})
 
     Module.delete_attribute(mod, :tag)
+  end
+
+  @doc false
+  def sub_module?(child, parent) do
+    String.starts_with? "#{parent}", "#{child}"
   end
 
   defp normalize_tags(tags) do
