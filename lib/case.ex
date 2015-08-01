@@ -24,6 +24,7 @@ defmodule Pavlov.Case do
       @pending false
 
       Agent.start(fn -> %{} end, name: :pavlov_let_defs)
+      Agent.start(fn -> %{} end, name: :pavlov_subject_defs)
 
       import Pavlov.Case
       import Pavlov.Syntax.Sugar
@@ -110,6 +111,19 @@ defmodule Pavlov.Case do
             end
           end)
           |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
+
+        # Redefine enclosing subject definitions in this module
+        Agent.get(:pavlov_subject_defs, fn dict ->
+          Stream.filter dict, fn {module, subjects} ->
+            String.starts_with? "#{__MODULE__}", "#{module}"
+          end
+        end)
+          |> Stream.flat_map(fn {_module, subjects} ->
+            Stream.map subjects, fn (fun) ->
+              quote do: subject(unquote(fun))
+            end
+          end)
+          |> Enum.each(&Module.eval_quoted(__MODULE__, &1))
       end
 
       # Cleans context stack
@@ -158,6 +172,46 @@ defmodule Pavlov.Case do
         new_let = {unquote(Macro.escape name), unquote(Macro.escape contents[:do])}
 
         Dict.put map, __MODULE__, (map[__MODULE__] || []) ++ [new_let]
+      end)
+    end
+  end
+
+  @doc """
+  You can use `subject` to explicitly define the value
+  that is returned by the subject method in the example
+  scope. A subject declared in a context will be available
+  in child contexts as well.
+
+  Example:
+      describe "Array" do
+        subject do
+          [1, 2, 3]
+        end
+
+        it "has the prescribed elements" do
+          assert subject == [1, 2, 3]
+        end
+
+        context "Inner context" do
+          it "can use an outer-scope subject" do
+            assert subject == [1, 2, 3]
+          end
+        end
+      end
+  """
+
+  defmacro subject(contents) do
+    contents = Macro.escape(contents)
+
+    quote bind_quoted: binding do
+      def subject do
+        Macro.expand(unquote(contents), __MODULE__)[:do]
+      end
+
+      defoverridable [subject: 0]
+
+      Agent.update(:pavlov_subject_defs, fn(map) ->
+        Dict.put map, __MODULE__, (map[__MODULE__] || []) ++ [contents]
       end)
     end
   end

@@ -35,6 +35,7 @@ end
 - [Usage](#usage)
 - [Describe and Context](#describe-and-context)
 - [Let](#let)
+- [Subject](#subject)
 - [Expects syntax](#expects-syntax)
 - [Included Matchers](#included-matchers)
 - [Callbacks](#callbacks)
@@ -80,6 +81,27 @@ let :order do
     {"burger", 10.0}
     {"fries", 5.2}
   ]}
+end
+```
+
+## Subject
+You can use `subject` to explicitly define the value that is returned by the subject method in the example scope. A subject declared in a context will be available in child contexts as well.
+
+```elixir
+describe "Array" do
+  subject do
+    [1, 2, 3]
+  end
+
+  it "has the prescribed elements" do
+    assert subject == [1, 2, 3]
+  end
+
+  context "Inner context" do
+    it "can use an outer-scope subject" do
+      assert subject == [1, 2, 3]
+    end
+  end
 end
 ```
 
