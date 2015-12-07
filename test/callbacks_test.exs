@@ -42,4 +42,30 @@ defmodule PavlovCallbackTest do
       end
     end
   end
+
+  describe "Lets" do
+    context "before :each" do
+      setup_all do
+        Agent.start_link(fn -> 0 end, name: :memoized_let)
+        :ok
+      end
+
+      let :something do
+        Agent.update(:memoized_let, fn acc -> acc + 1 end)
+        "I am a string"
+      end
+
+      before :each do
+        Agent.update(:memoized_let, fn acc -> 0 end)
+        something
+        :ok
+      end
+
+      it "only invokes the letted block once" do
+        assert Agent.get(:memoized_let, fn acc -> acc end) == 1
+        something
+        assert Agent.get(:memoized_let, fn acc -> acc end) == 1
+      end
+    end
+  end
 end
