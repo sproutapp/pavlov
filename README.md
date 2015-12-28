@@ -259,7 +259,7 @@ end
 it "gets a page" do
   HTTPotion.get("http://example.com")
 
-  expect HTTPotion |> to_have_received :get |> with "http://example.com"
+  expect HTTPotion |> to_have_received :get |> with_args "http://example.com"
 end
 ```
 

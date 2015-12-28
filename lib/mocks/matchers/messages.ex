@@ -14,7 +14,7 @@ defmodule Pavlov.Mocks.Matchers.Messages do
     args = inspect args
 
     case matcher_name do
-      :have_received -> "Expected #{module} to have received #{method} with #{args}"
+      :have_received -> "Expected #{module} to have received #{method} with_args #{args}"
     end
   end
 
