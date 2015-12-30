@@ -46,8 +46,9 @@ defmodule Pavlov.Callbacks do
       end
   """
   defmacro before(:each, context, contents) do
+    block = contents[:do]
     quote do
-      setup unquote(context), do: unquote(contents)[:do]
+      setup unquote(context), do: unquote(do_block(block))
 
       Agent.update :pavlov_callback_defs, fn(map) ->
         Dict.put_new map, __MODULE__, {:each, unquote(Macro.escape context), unquote(Macro.escape contents[:do])}
@@ -55,13 +56,28 @@ defmodule Pavlov.Callbacks do
     end
   end
   defmacro before(:all, context, contents) do
+    block = contents[:do]
     quote do
-      setup_all unquote(context), do: unquote(contents)[:do]
+      setup_all unquote(context), do: unquote(do_block(block))
 
       Agent.update :pavlov_callback_defs, fn(map) ->
         Dict.put_new map, __MODULE__, {:all, unquote(Macro.escape context), unquote(Macro.escape contents[:do])}
       end
     end
+  end
+
+  defp do_block({:__block__, _, statements} = block) do
+    [last | _] = Enum.reverse(statements)
+    if match?(:ok, last) || match?({:ok, _}, last) do
+      block
+    else
+      {:__block__, [], [statements, :ok]}
+    end
+  end
+  defp do_block({:ok, _} = block), do: block
+  defp do_block(:ok), do: :ok
+  defp do_block(block) do
+    {:__block__, [], [block, :ok]}
   end
 
 end
