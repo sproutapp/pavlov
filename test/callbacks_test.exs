@@ -24,6 +24,15 @@ defmodule PavlovCallbackTest do
           expect context[:hello] |> to_eq "world"
         end
       end
+
+      context "without :ok, {:ok, dict}" do
+        before :each do
+          :something_other_than_ok
+        end
+        it "does not error", _context do
+          :ok
+        end
+      end
     end
 
     describe "before :all" do
@@ -38,6 +47,15 @@ defmodule PavlovCallbackTest do
       context "With a Nested context" do
         it "runs the callback before the test", context do
           expect context[:context] |> to_eq :setup_all
+        end
+      end
+
+      context "without :ok, {:ok, dict}" do
+        before :all do
+          :something_other_than_ok
+        end
+        it "does not error", _context do
+          :ok
         end
       end
     end
