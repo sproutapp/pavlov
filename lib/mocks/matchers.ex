@@ -61,9 +61,9 @@ defmodule Pavlov.Mocks.Matchers do
   arguments passed in to the given method.
 
   ## Example
-      expect HTTPotion |> to_have_received :get |> with "http://example.com"
+      expect HTTPotion |> to_have_received :get |> with_args "http://example.com"
   """
-  def with(method, args) do
+  def with_args(method, args) do
     {method, args}
   end
 

@@ -98,7 +98,7 @@ defmodule PavlovMocksTest do
 
       Fixtures.Mockable.do_with_args("a string")
 
-      expect Fixtures.Mockable |> to_have_received :do_with_args |> with "a string"
+      expect Fixtures.Mockable |> to_have_received :do_with_args |> with_args "a string"
     end
 
     it "allows setting expectations matching method and several arguments" do
@@ -106,7 +106,7 @@ defmodule PavlovMocksTest do
 
       Fixtures.Mockable.do_with_several_args(1, 2)
 
-      expect Fixtures.Mockable |> to_have_received :do_with_several_args |> with [:_, 2]
+      expect Fixtures.Mockable |> to_have_received :do_with_several_args |> with_args [:_, 2]
     end
 
     it "allows mocking with arguments to return something" do
@@ -114,7 +114,7 @@ defmodule PavlovMocksTest do
 
       result = Fixtures.Mockable.do_with_args("a string")
 
-      expect Fixtures.Mockable |> to_have_received :do_with_args |> with "a string"
+      expect Fixtures.Mockable |> to_have_received :do_with_args |> with_args "a string"
       expect result |> to_eq :error
     end
 
@@ -122,7 +122,7 @@ defmodule PavlovMocksTest do
       message = message_for_matcher(:have_received, [Fixtures.Mockable, :do_with_args, [1]], :assertion)
 
       expect message
-        |> to_eq "Expected Elixir.Fixtures.Mockable to have received :do_with_args with [1]"
+        |> to_eq "Expected Elixir.Fixtures.Mockable to have received :do_with_args with_args [1]"
     end
   end
 
